@@ -1,0 +1,59 @@
+GET http://localhost:8000/
+
+######################
+GET http://localhost:8000/users1
+
+######################
+
+POST http://localhost:8000/city
+
+
+####################
+GET http://localhost:8000/state
+
+
+####################
+GET http://localhost:8000/api/users/3
+
+####################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+POST http://localhost:8000/users1
+Content-Type: application/json
+
+{
+    "id": 5,
+    "name": "John",
+    "contact_phone": "0798447783",
+    "phone_verified": false,
+    "email": "john@gmail.com",
+    "email_verified": true,
+    "password": "124rfcv",
+    "created_at": "2015-07-03",
+    "updated_at": "2015-07-13"
+}
+
+
+
+####################
+
+
+####################
+
+

@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar, integer , boolean, real, timestamp, primaryKey} from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar, integer , boolean, real, date, timestamp, primaryKey} from "drizzle-orm/pg-core";
 import  {relations} from "drizzle-orm";
 
 
@@ -12,8 +12,8 @@ export const users_table = pgTable("users",{
     email: varchar("email", { length: 100 }),
     email_verified: boolean("email_verified"),
     password: varchar("password", { length: 100 }),
-    created_at: varchar("created_at", { length: 100 }),
-    updated_at: varchar("updated_at", { length: 100 }),
+    created_at: date("created_at"),
+    updated_at: date("updated_at"),
     
 });
 
@@ -27,9 +27,9 @@ export const driver_table = pgTable("driver",{
     car_year: varchar("car_year"),
     user_id: integer("city_id").notNull().references(() => users_table.id, { onDelete: "cascade" }),
     online: boolean("online"),
-    delivering: varchar("delivering", { length: 100 }),
-    created_at: varchar("created_at", { length: 100 }),
-    updated_at: varchar("updated_at", { length: 100 }),
+    delivering: date("delivering"),
+    created_at: date("created_at"),
+    updated_at: date("updated_at"),
    
 });
 
@@ -43,8 +43,8 @@ export const address_table = pgTable("address",{
     delivery_instructions: varchar("delivery_instructions", { length: 100 }),
     city_id: integer("city_id").notNull().references(() => city_table.id, { onDelete: "cascade" }),
     user_id: integer("user_id").notNull().references(() => users_table.id, { onDelete: "cascade" }),
-    created_at: varchar("created_at", { length: 100 }),
-    updated_at: varchar("updated_at", { length: 100 }),
+    created_at: date("created_at"),
+    updated_at: date("updated_at"),
     
 });
 
@@ -56,8 +56,8 @@ export const restaurant_table = pgTable("restaurant",{
     street_address: varchar("street_address", { length: 100 }),
     zip_code: varchar("zip_code", { length: 100 }),
     city_id: integer("city_id").notNull().references(() => city_table.id, { onDelete: "cascade" }),
-    created_at: varchar("created_at", { length: 100 }),
-    updated_at: varchar("updated_at", { length: 100 }),
+    created_at: date("created_at"),
+    updated_at: date("updated_at"),
 });
 
 
@@ -71,8 +71,8 @@ export const menu_items_table = pgTable("menu_items",{
     ingredients: varchar("ingredients",{ length: 100 }),
     price: varchar("price",{ length: 100 }),
     active: boolean("active"),
-    created_at: varchar("created_at", { length: 100 }),
-    updated_at: varchar("updated_at", { length: 100 }),
+    created_at: date("created_at"),
+    updated_at: date("updated_at"),
    
 });
 
@@ -127,8 +127,8 @@ export const comment_table = pgTable("comment",{
     comment_text: varchar("comment_text", { length: 100 }),
     is_compliant: boolean("is_compliant"),
     is_praise: boolean("is_praise"),
-    created_at: varchar("created_at", { length: 100 }),
-    updated_at: varchar("updated_at", { length: 100 }),
+    created_at: date("created_at"),
+    updated_at: date("updated_at"),
     
 });
 
@@ -153,7 +153,7 @@ export const order_status_table = pgTable("order_status",{
     id: serial("id").primaryKey(),
     order_id: integer("order_id").notNull().references(() => orders_table.id, { onDelete: "cascade" }),
     status_catalog_id: integer("status_catalog_id").notNull().references(() => status_catalog_table.id, { onDelete: "cascade" }),
-    created_at: varchar("created_at", { length: 100 }),
+    created_at: date("created_at"),
     
 });
 
@@ -180,8 +180,8 @@ export const orders_table = pgTable("orders",{
     discount: integer("discount"),
     final_price: integer("final_price"),
     comment: varchar("comment", { length: 100 }),
-    created_at: varchar("created_at", { length: 100 }),
-    updated_at: varchar("updated_at", { length: 100 }),
+    created_at: date("created_at"),
+    updated_at: date("updated_at"),
    
 });
 
@@ -384,19 +384,33 @@ export const commentRelations = relations(comment_table, ({ one }) => ({
 
 
 // Typeof functions
-export const cityRelationsType = typeof cityRelations;
-export const restaurantRelationsType = typeof restaurantRelations;
-export const restaurantOwnerRelationsType = typeof restaurantOwnerRelations;
-export const addressRelationsType = typeof addressRelations;
-export const menuItemRelationsType = typeof menuItemRelations;
-export const categoryRelationsType = typeof categoryRelations;
-export const orderMenuItemRelationsType = typeof orderMenuItemRelations;
-export const orderRelationsType = typeof orderRelations;
-export const orderStatusRelationsType = typeof orderStatusRelations;
-export const statusCatalogRelationsType = typeof statusCatalogRelations;
-export const userRelationsType = typeof userRelations;
-export const driverRelationsType = typeof driverRelations;
-export const commentRelationsType = typeof commentRelations;
+export type cityRelationsType = typeof city_table.$inferInsert;
+export type restaurantRelationsType = typeof restaurant_table.$inferInsert;
+export type restaurantOwnerRelationsType = typeof restaurant_owner_table.$inferInsert;
+export type addressRelationsType = typeof address_table.$inferInsert;
+export type menuItemRelationsType = typeof menu_items_table.$inferInsert;
+export type categoryRelationsType = typeof category_table.$inferInsert;
+export type orderMenuItemRelationsType = typeof order_menu_item_table.$inferInsert;
+export type orderRelationsType = typeof orders_table.$inferInsert;
+export type orderStatusRelationsType = typeof order_status_table.$inferInsert;
+export type statusCatalogRelationsType = typeof status_catalog_table.$inferInsert;
+export type userRelationsType = typeof users_table.$inferInsert;
+export type driverRelationsType = typeof driver_table.$inferInsert;
+export type commentRelationsType = typeof comment_table.$inferInsert;
+
+export type stateRelationsType = typeof state_table.$inferInsert;
+// export type restaurantRelationsType = typeof restaurant_table.$inferSelect;
+// export type restaurantOwnerRelationsType = typeof restaurant_owner_table.$inferSelect;
+// export type addressRelationsType = typeof address_table.$inferSelect;
+// export type menuItemRelationsType = typeof menu_items_table.$inferSelect;
+// export type categoryRelationsType = typeof category_table.$inferSelect;
+// export type orderMenuItemRelationsType = typeof order_menu_item_table.$inferSelect;
+// export type orderRelationsType = typeof orders_table.$inferSelect;
+// export type orderStatusRelationsType = typeof order_status_table.$inferSelect;
+// export type statusCatalogRelationsType = typeof status_catalog_table.$inferSelect;
+export type userselect = typeof users_table.$inferSelect;
+// export type driverRelationsType = typeof driver_table.$inferSelect;
+// export type commentRelationsType = typeof comment_table.$inferSelect;
 
 
 
@@ -664,3 +678,18 @@ export const commentRelationsType = typeof commentRelations;
 //         references: [orders_table.id]
 //     })
 // }));
+
+// Typeof functions
+// export type cityRelationsType = typeof city_table.$inferInsert;
+// export type restaurantRelationsType = typeof restaurantRelations;
+// export type restaurantOwnerRelationsType = typeof restaurantOwnerRelations;
+// export type addressRelationsType = typeof addressRelations;
+// export type menuItemRelationsType = typeof menuItemRelations;
+// export type categoryRelationsType = typeof categoryRelations;
+// export type orderMenuItemRelationsType = typeof orderMenuItemRelations;
+// export type orderRelationsType = typeof orderRelations;
+// export type orderStatusRelationsType = typeof orderStatusRelations;
+// export type statusCatalogRelationsType = typeof statusCatalogRelations;
+// export type userRelationsType = typeof userRelations;
+// export type driverRelationsType = typeof driverRelations;
+// export type commentRelationsType = typeof commentRelations;
