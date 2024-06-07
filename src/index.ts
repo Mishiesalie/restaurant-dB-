@@ -3,7 +3,11 @@ import { Hono } from 'hono'
 import "dotenv/config"
 import { usersRouter } from './users/users.router'
 import { cityRouter } from './city/city.router'
-// import { stateRouter } from './state/state.router'
+import { stateRouter } from './state/state.router'
+import { categoryRouter } from './Category/category.router'
+import { restaurantRouter } from './restaurant/restaurant.router'
+import { restaurantownerRouter } from './restaurantowner/restaurantowner.router'
+
 import { Context } from 'hono'
 
 
@@ -24,12 +28,26 @@ app.route("/api", usersRouter)  //users
 app.route("/",usersRouter)
 
 // custom city
-app.route("/", cityRouter)  
+app.route("/api", cityRouter)  
 app.route("/",cityRouter)
 
 // custom state
-// app.route("/", stateRouter)  
-// app.route("/",stateRouter)
+app.route("/api", stateRouter)  
+app.route("/",stateRouter)
+
+
+// custom category
+app.route("/api", categoryRouter)  
+app.route("/",categoryRouter)
+
+
+//custom restaurant
+app.route("/api", restaurantRouter)  
+app.route("/",restaurantRouter)
+
+//custom restaurantowner
+app.route("/api", restaurantownerRouter)  
+app.route("/",restaurantownerRouter)
 
 
 

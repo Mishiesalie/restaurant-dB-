@@ -397,21 +397,22 @@ export type statusCatalogRelationsType = typeof status_catalog_table.$inferInser
 export type userRelationsType = typeof users_table.$inferInsert;
 export type driverRelationsType = typeof driver_table.$inferInsert;
 export type commentRelationsType = typeof comment_table.$inferInsert;
-
 export type stateRelationsType = typeof state_table.$inferInsert;
-// export type restaurantRelationsType = typeof restaurant_table.$inferSelect;
-// export type restaurantOwnerRelationsType = typeof restaurant_owner_table.$inferSelect;
-// export type addressRelationsType = typeof address_table.$inferSelect;
-// export type menuItemRelationsType = typeof menu_items_table.$inferSelect;
-// export type categoryRelationsType = typeof category_table.$inferSelect;
-// export type orderMenuItemRelationsType = typeof order_menu_item_table.$inferSelect;
-// export type orderRelationsType = typeof orders_table.$inferSelect;
-// export type orderStatusRelationsType = typeof order_status_table.$inferSelect;
-// export type statusCatalogRelationsType = typeof status_catalog_table.$inferSelect;
-export type userselect = typeof users_table.$inferSelect;
-// export type driverRelationsType = typeof driver_table.$inferSelect;
-// export type commentRelationsType = typeof comment_table.$inferSelect;
 
+export type cityselect = typeof city_table.$inferSelect;
+export type restaurantselect = typeof restaurant_table.$inferSelect;
+export type restaurantOwnerselect = typeof restaurant_owner_table.$inferSelect;
+export type addressselect = typeof address_table.$inferSelect;
+export type menuItemselect = typeof menu_items_table.$inferSelect;
+export type categoryselect = typeof category_table.$inferSelect;
+export type orderMenuItemselect = typeof order_menu_item_table.$inferSelect;
+export type orderselect = typeof orders_table.$inferSelect;
+export type orderStatusselect = typeof order_status_table.$inferSelect;
+export type statusCatalogselect = typeof status_catalog_table.$inferSelect;
+export type userselect = typeof users_table.$inferSelect;
+export type driverselect = typeof driver_table.$inferSelect;
+export type commentselect = typeof comment_table.$inferSelect;
+export type stateselect = typeof state_table.$inferSelect;
 
 
 

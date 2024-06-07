@@ -1,5 +1,5 @@
 import db from "../drizzle/db";
-import { cityRelationsType} from "../drizzle/schema";
+import { cityRelationsType, city_table, cityselect} from "../drizzle/schema";
 
 
 //get users from the database

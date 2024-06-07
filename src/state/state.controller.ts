@@ -1,7 +1,7 @@
 import { Context } from "hono";
 import { stateService } from "./state.service";
 
-export const listUsers = async (c: Context) => {
+export const liststate = async (c: Context) => {
     try {
         //limit the number of users to be returned
 
@@ -9,7 +9,7 @@ export const listUsers = async (c: Context) => {
 
         const data = await stateService(limit);
         if (data == null || data.length == 0) {
-            return c.text("User not found", 404)
+            return c.text("state not found", 404)
         }
         return c.json(data, 200);
     } catch (error: any) {

@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { number, string, z } from 'zod'
 
 
 export const userSchema = z.object({
@@ -12,4 +12,12 @@ export const userSchema = z.object({
     created_at: z.string(),
     updated_at: z.string()
     
+})
+
+export const citySchema = z.object({
+    id: number(),
+    name: string(),
+    state_id: number(),
+    address: string()
+
 })

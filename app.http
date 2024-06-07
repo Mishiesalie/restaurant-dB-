@@ -1,7 +1,11 @@
-GET http://localhost:8000/
+GET http://localhost:8000/kk
 
 ######################
-GET http://localhost:8000/users1
+GET http://localhost:8000/users
+
+####################
+GET http://localhost:8000/api/users/2
+
 
 ######################
 
@@ -12,11 +16,17 @@ POST http://localhost:8000/city
 GET http://localhost:8000/state
 
 
-####################
-GET http://localhost:8000/api/users/3
 
 ####################
+GET http://localhost:8000/category
 
+
+####################
+GET http://localhost:8000/restaurant
+
+
+####################
+GET http://localhost:8000/restaurantowner
 
 
 

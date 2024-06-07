@@ -1,5 +1,5 @@
 import db from "../drizzle/db";
-import { stateRelationsType} from "../drizzle/schema";
+import { stateRelationsType, state_table, stateselect} from "../drizzle/schema";
 
 
 //get users from the database

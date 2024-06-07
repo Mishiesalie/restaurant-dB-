@@ -9,7 +9,7 @@ import { createUser } from "./users.controller";
 export const usersRouter = new Hono();
 
 //get all users      api/users
-usersRouter.get("/users1", listUsers);
+usersRouter.get("/users", listUsers);
 
 usersRouter.post("/users", zValidator('json', userSchema, (result, c) => {
     if (!result.success) {

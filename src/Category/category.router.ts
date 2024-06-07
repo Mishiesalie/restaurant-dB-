@@ -1,10 +1,10 @@
 import { Hono } from "hono";
 import { type Context } from "hono";
-import { listcity} from "./city.controller"
+import { listcategory} from "./category.controller"
 import { zValidator } from "@hono/zod-validator";
 
 
-export const cityRouter = new Hono();
+export const categoryRouter = new Hono();
 
 //get all users      api/users
-cityRouter.get("/state", listcity);
+categoryRouter.get("/category", listcategory);
