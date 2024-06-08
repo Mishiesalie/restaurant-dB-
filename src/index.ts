@@ -9,6 +9,14 @@ import { restaurantRouter } from './restaurant/restaurant.router'
 import { restaurantownerRouter } from './restaurantowner/restaurantowner.router'
 
 import { Context } from 'hono'
+import { driversRouter } from './drivers/drivers.router'
+import { ordersRouter } from './orders/orders.router'
+import { commentsRouter } from './comments/comments.router'
+import { menuItemsRouter } from './menuitems/menuitems.router'
+import { orderMenuItemRouter } from './ordermenuitems/ordermenuitems.router'
+import { addressRouter } from './address/address.router'
+import { statuscatalogRouter } from './statuscatalog/statuscatalog.router'
+import { orderstatusRouter } from './orderstatus/orderstatus.router'
 
 
 const app = new Hono()
@@ -45,9 +53,49 @@ app.route("/",categoryRouter)
 app.route("/api", restaurantRouter)  
 app.route("/",restaurantRouter)
 
+
 //custom restaurantowner
 app.route("/api", restaurantownerRouter)  
 app.route("/",restaurantownerRouter)
+
+
+//custom drivers
+app.route("/api",driversRouter)
+app.route("/",driversRouter)
+
+
+//custom orders
+app.route("/api",ordersRouter)
+app.route("/",ordersRouter)
+
+
+//custom comments
+app.route("/api",commentsRouter)
+app.route("/",commentsRouter)
+
+
+//custom menuitems
+app.route("/api",menuItemsRouter)
+app.route("/",menuItemsRouter)
+
+//custom ordermenuitems
+app.route("/api",orderMenuItemRouter)
+app.route("/",orderMenuItemRouter)
+
+
+// custom address
+app.route("/api",addressRouter)
+app.route("/",addressRouter)
+
+
+// custom statuscatalog
+app.route("/api",orderstatusRouter)
+app.route("/",orderstatusRouter)
+
+
+// custom statuscatalog
+app.route("/api",statuscatalogRouter)
+app.route("/",statuscatalogRouter)
 
 
 

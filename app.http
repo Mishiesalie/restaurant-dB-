@@ -29,6 +29,39 @@ GET http://localhost:8000/restaurant
 GET http://localhost:8000/restaurantowner
 
 
+####################
+GET http://localhost:8000/orders
+
+
+####################
+GET http://localhost:8000/drivers
+
+
+####################
+GET http://localhost:8000/comments
+
+
+####################
+GET http://localhost:8000/menuitems
+
+
+####################
+GET http://localhost:8000/ordermenuitems
+
+
+####################
+GET http://localhost:8000/address
+
+
+####################
+GET http://localhost:8000/statuscatalog
+
+
+####################
+GET http://localhost:8000/orderstatus
+
+
+
 
 
 
