@@ -1,3 +1,4 @@
+import { boolean } from 'drizzle-orm/pg-core'
 import { number, string, z } from 'zod'
 
 
@@ -58,7 +59,48 @@ export const restaurantSchema = z.object({
     updated_at: string()
 })
 
+export const restaurantownerSchema = z.object({
+    id: number(),
+    restaurant_id: number(),
+    owner_id: number()
 
+
+})
+
+
+export const orderstatusSchema = z.object({
+    id: number(),
+    order_id: number(),
+    status_catalog_id: number(),
+    created_at: string()
+})
+
+
+export const orderMenuItemSchema = z.object({
+    id: number(),
+    order_id: number(),
+    menu_item_id: number(),
+    quantity: number(),
+    item_price: number(),
+    price: number(),
+    comment: string()
+    
+})
+
+
+export  const menuItemSchema = z.object({
+    id: number(),
+    restaurant_id: number(),
+    name: string(),
+    description: string(),
+    price: number(),
+    category_id: number(),
+    ingredients: string(),
+    active: z.boolean(),
+    created_at: string(),
+    updated_at: string()
+
+})
 
 
    

@@ -153,7 +153,7 @@ export const order_status_table = pgTable("order_status",{
     id: serial("id").primaryKey(),
     order_id: integer("order_id").notNull().references(() => orders_table.id, { onDelete: "cascade" }),
     status_catalog_id: integer("status_catalog_id").notNull().references(() => status_catalog_table.id, { onDelete: "cascade" }),
-    created_at: timestamp("created_at"),
+    created_at: timestamp("created_at")
     
 });
 
