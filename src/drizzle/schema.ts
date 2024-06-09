@@ -12,8 +12,8 @@ export const users_table = pgTable("users",{
     email: varchar("email", { length: 100 }),
     email_verified: boolean("email_verified"),
     password: varchar("password", { length: 100 }),
-    created_at: date("created_at"),
-    updated_at: date("updated_at"),
+    created_at: timestamp("created_at"),
+    updated_at: timestamp("updated_at"),
     
 });
 
@@ -27,9 +27,9 @@ export const driver_table = pgTable("driver",{
     car_year: varchar("car_year"),
     user_id: integer("city_id").notNull().references(() => users_table.id, { onDelete: "cascade" }),
     online: boolean("online"),
-    delivering: date("delivering"),
-    created_at: date("created_at"),
-    updated_at: date("updated_at"),
+    delivering: timestamp("delivering"),
+    created_at: timestamp("created_at"),
+    updated_at: timestamp("updated_at"),
    
 });
 
@@ -43,8 +43,8 @@ export const address_table = pgTable("address",{
     delivery_instructions: varchar("delivery_instructions", { length: 100 }),
     city_id: integer("city_id").notNull().references(() => city_table.id, { onDelete: "cascade" }),
     user_id: integer("user_id").notNull().references(() => users_table.id, { onDelete: "cascade" }),
-    created_at: date("created_at"),
-    updated_at: date("updated_at"),
+    created_at: timestamp("created_at"),
+    updated_at: timestamp("updated_at"),
     
 });
 
@@ -56,8 +56,8 @@ export const restaurant_table = pgTable("restaurant",{
     street_address: varchar("street_address", { length: 100 }),
     zip_code: varchar("zip_code", { length: 100 }),
     city_id: integer("city_id").notNull().references(() => city_table.id, { onDelete: "cascade" }),
-    created_at: date("created_at"),
-    updated_at: date("updated_at"),
+    created_at: timestamp("created_at"),
+    updated_at: timestamp("updated_at"),
 });
 
 
@@ -71,8 +71,8 @@ export const menu_items_table = pgTable("menu_items",{
     ingredients: varchar("ingredients",{ length: 100 }),
     price: varchar("price",{ length: 100 }),
     active: boolean("active"),
-    created_at: date("created_at"),
-    updated_at: date("updated_at"),
+    created_at: timestamp("created_at"),
+    updated_at: timestamp("updated_at"),
    
 });
 
@@ -127,8 +127,8 @@ export const comment_table = pgTable("comment",{
     comment_text: varchar("comment_text", { length: 100 }),
     is_compliant: boolean("is_compliant"),
     is_praise: boolean("is_praise"),
-    created_at: date("created_at"),
-    updated_at: date("updated_at"),
+    created_at: timestamp("created_at"),
+    updated_at: timestamp("updated_at"),
     
 });
 
@@ -153,7 +153,7 @@ export const order_status_table = pgTable("order_status",{
     id: serial("id").primaryKey(),
     order_id: integer("order_id").notNull().references(() => orders_table.id, { onDelete: "cascade" }),
     status_catalog_id: integer("status_catalog_id").notNull().references(() => status_catalog_table.id, { onDelete: "cascade" }),
-    created_at: date("created_at"),
+    created_at: timestamp("created_at"),
     
 });
 
@@ -180,8 +180,8 @@ export const orders_table = pgTable("orders",{
     discount: integer("discount"),
     final_price: integer("final_price"),
     comment: varchar("comment", { length: 100 }),
-    created_at: date("created_at"),
-    updated_at: date("updated_at"),
+    created_at: timestamp("created_at"),
+    updated_at: timestamp("updated_at"),
    
 });
 

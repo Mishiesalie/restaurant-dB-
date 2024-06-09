@@ -21,3 +21,44 @@ export const citySchema = z.object({
     address: string()
 
 })
+
+export const stateSchema = z.object({
+    id: number(),
+    name: string(),
+    code: string()
+})
+
+export const statusCatelogSchema = z.object({
+    id: number(),
+    name: string()
+})
+
+export const ordersSchema = z.object({
+    id: number(),
+    user_id: number(),
+    restaurant_id: number(),
+    driver_id: number(),
+    delivery_address_id: number(),
+    coment: number(),
+    final_price: number(),
+    discount: number(),
+    estimated_delivery_time: number(),
+    price: number(),
+    created_at: string(),
+    updated_at: string()
+})
+
+export const restaurantSchema = z.object({
+    id: number(),
+    name: string(),
+    street_address: string(),
+    city_id: number(),
+    zip_code: number(),
+    created_at: string(),
+    updated_at: string()
+})
+
+
+
+
+   

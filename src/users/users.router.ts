@@ -1,10 +1,9 @@
 
 import { Hono } from "hono";
 import { type Context } from "hono";
-import { listUsers} from "./users.controller"
+import { listUsers, createUser, getUser, updateUser, deleteUser} from "./users.controller"
 import { zValidator } from "@hono/zod-validator";
 import { userSchema } from "../validators";
-import { createUser } from "./users.controller";
 
 export const usersRouter = new Hono();
 
@@ -16,6 +15,22 @@ usersRouter.post("/users", zValidator('json', userSchema, (result, c) => {
         return c.json(result.error, 400)
     }
 }), createUser)
+
+usersRouter.get("/users/:id", getUser)
+// create a user 
+usersRouter.post("/users", zValidator('json', userSchema, (result, c) => {
+    if (!result.success) {
+        return c.json(result.error, 400)
+    }
+}), createUser)
+
+//update a user
+usersRouter.put("/users/:id", updateUser)
+
+
+usersRouter.delete("/users/:id", deleteUser)
+
+
 
 
 

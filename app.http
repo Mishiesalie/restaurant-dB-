@@ -76,8 +76,8 @@ GET http://localhost:8000/orderstatus
 
 
 
-
-POST http://localhost:8000/users1
+#
+POST http://localhost:8000/users
 Content-Type: application/json
 
 {
