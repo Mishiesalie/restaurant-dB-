@@ -1,14 +1,29 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
 import "dotenv/config"
+// import { usersRouter } from './users/users.router'
+// import { cityRouter } from './city/city.router'
+// import { stateRouter } from './state/state.router'
+// import { categoryRouter } from './Category/category.router'
+// import { restaurantRouter } from './restaurant/restaurant.router'
+// import { restaurantownerRouter } from './restaurantowner/restaurantowner.router'
+
+import { Context } from 'hono'
+// import { driversRouter } from './drivers/drivers.router'
+// import { ordersRouter } from './orders/orders.router'
+// import { commentsRouter } from './comments/comments.router'
+// import { menuItemsRouter } from './menuitems/menuitems.router'
+// import { orderMenuItemRouter } from './ordermenuitems/ordermenuitems.router'
+// import { addressRouter } from './address/address.router'
+// import { statuscatalogRouter } from './statuscatalog/statuscatalog.router'
+// import { orderstatusRouter } from './orderstatus/orderstatus.router'
+
 import { usersRouter } from './users/users.router'
 import { cityRouter } from './city/city.router'
 import { stateRouter } from './state/state.router'
 import { categoryRouter } from './Category/category.router'
 import { restaurantRouter } from './restaurant/restaurant.router'
 import { restaurantownerRouter } from './restaurantowner/restaurantowner.router'
-
-import { Context } from 'hono'
 import { driversRouter } from './drivers/drivers.router'
 import { ordersRouter } from './orders/orders.router'
 import { commentsRouter } from './comments/comments.router'
@@ -18,9 +33,48 @@ import { addressRouter } from './address/address.router'
 import { statuscatalogRouter } from './statuscatalog/statuscatalog.router'
 import { orderstatusRouter } from './orderstatus/orderstatus.router'
 
-import { Logger } from 'hono/logger'
+const app = new Hono().basePath('/api')
 
-const app = new Hono()
+//... rest of the code
+
+
+
+
+import "dotenv/config"
+import { logger } from 'hono/logger'
+import { csrf } from 'hono/csrf'
+import { trimTrailingSlash } from 'hono/trailing-slash'
+import { timeout } from 'hono/timeout'
+import { HTTPException } from 'hono/http-exception'
+import { prometheus } from '@hono/prometheus'
+
+
+
+
+// const app = new Hono().basePath('/api')
+
+const customTimeoutException = () =>
+  new HTTPException(408, {
+    message: `Request timeout after waiting for more than 10 seconds`,
+  })
+
+const { printMetrics, registerMetrics } = prometheus()
+
+// inbuilt middlewares
+app.use(logger())  //logs request and response to the console
+app.use(csrf()) //prevents CSRF attacks by checking request headers.
+app.use(trimTrailingSlash()) //removes trailing slashes from the request URL
+app.use('/', timeout(10000, customTimeoutException))
+//3rd party middlewares
+app.use('*', registerMetrics)
+
+
+
+
+
+
+
+// const app = new Hono()
 
 // default route
 app.get('/kk', (c) => {

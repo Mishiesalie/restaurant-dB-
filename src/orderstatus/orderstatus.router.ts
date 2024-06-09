@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { type Context } from "hono";
 import { getorderstatus, listorderstatus, createorderstatus, updateorderstatus, deleteorderstatus} from "./orderstatus.controller"
 import { zValidator } from "@hono/zod-validator";
+import { orderstatusSchema } from "../validators";
 
 
 export const orderstatusRouter = new Hono();

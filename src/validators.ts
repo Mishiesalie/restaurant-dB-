@@ -102,5 +102,27 @@ export  const menuItemSchema = z.object({
 
 })
 
+export const driverSchema = z.object({
+    id: number(),
+    car_make: string(),
+    car_model: string(),
+    user_id: number(),
+    online: z.boolean(),
+    delivering: string(),
+    created_at: string(),
+    updated_at: string()
+})
+
+export const addressSchema = z.object({
+    id: number(),
+    street_address_1: string(),
+    street_address_2: string(),
+    zip_code: string(),
+    delivering_instractions: string(),
+    city_id: number(),
+    user_id: number(),
+    created_at: string(),
+    updated_at: string()
+})
 
    
