@@ -17,12 +17,15 @@ importers:
       '@hono/zod-validator':
         specifier: ^0.2.2
         version: 0.2.2(hono@4.4.3)(zod@3.23.8)
+      '@neondatabase/serverless':
+        specifier: ^0.9.3
+        version: 0.9.3
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
       drizzle-orm:
-        specifier: ^0.31.0
-        version: 0.31.1(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(pg@8.12.0)
+        specifier: ^0.31.2
+        version: 0.31.2(@neondatabase/serverless@0.9.3)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(pg@8.12.0)
       hono:
         specifier: ^4.4.3
         version: 4.4.3
@@ -32,9 +35,6 @@ importers:
       neon:
         specifier: ^2.0.0
         version: 2.0.0
-      pg:
-        specifier: ^8.11.5
-        version: 8.12.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -487,6 +487,9 @@ packages:
       hono: '>=3.9.0'
       zod: ^3.19.1
 
+  '@neondatabase/serverless@0.9.3':
+    resolution: {integrity: sha512-6ZBK8asl2Z3+ADEaELvbaVVGVlmY1oAzkxxZfpmXPKFuJhbDN+5fU3zYBamsahS/Ch1zE+CVWB3R+8QEI2LMSw==}
+
   '@opentelemetry/api@1.9.0':
     resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==}
     engines: {node: '>=8.0.0'}
@@ -523,8 +526,8 @@ packages:
     resolution: {integrity: sha512-dxluXlhT1N9bpj2eZR3N/z3u4H0PbbrBYgyouIobFF25tOt2Buy1abx26Jii96qcYV0JgxjhnuV+FBcgR0Xa0w==}
     hasBin: true
 
-  drizzle-orm@0.31.1:
-    resolution: {integrity: sha512-hTbYne2XX3y6sV7WSxcPH6/vNSiQSUG9VZsFI27jBMCN0OT3Ok7ao3pIT5OMAqWkzJCRFgGjAaUeTAZWPgOKag==}
+  drizzle-orm@0.31.2:
+    resolution: {integrity: sha512-QnenevbnnAzmbNzQwbhklvIYrDE8YER8K7kSrAWQSV1YvFCdSQPzj+jzqRdTSsV2cDqSpQ0NXGyL1G9I43LDLg==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=3'
@@ -534,6 +537,7 @@ packages:
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
       '@planetscale/database': '>=1'
+      '@tidbcloud/serverless': '*'
       '@types/better-sqlite3': '*'
       '@types/pg': '*'
       '@types/react': '>=18'
@@ -567,6 +571,8 @@ packages:
       '@opentelemetry/api':
         optional: true
       '@planetscale/database':
+        optional: true
+      '@tidbcloud/serverless':
         optional: true
       '@types/better-sqlite3':
         optional: true
@@ -1032,6 +1038,10 @@ snapshots:
       hono: 4.4.3
       zod: 3.23.8
 
+  '@neondatabase/serverless@0.9.3':
+    dependencies:
+      '@types/pg': 8.11.6
+
   '@opentelemetry/api@1.9.0': {}
 
   '@types/node@20.14.2':
@@ -1064,8 +1074,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.31.1(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(pg@8.12.0):
+  drizzle-orm@0.31.2(@neondatabase/serverless@0.9.3)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)(pg@8.12.0):
     optionalDependencies:
+      '@neondatabase/serverless': 0.9.3
       '@opentelemetry/api': 1.9.0
       '@types/pg': 8.11.6
       pg: 8.12.0
@@ -1214,7 +1225,8 @@ snapshots:
   pg-cloudflare@1.1.1:
     optional: true
 
-  pg-connection-string@2.6.4: {}
+  pg-connection-string@2.6.4:
+    optional: true
 
   pg-int8@1.0.1: {}
 
@@ -1223,6 +1235,7 @@ snapshots:
   pg-pool@3.6.2(pg@8.12.0):
     dependencies:
       pg: 8.12.0
+    optional: true
 
   pg-protocol@1.6.1: {}
 
@@ -1233,6 +1246,7 @@ snapshots:
       postgres-bytea: 1.0.0
       postgres-date: 1.0.7
       postgres-interval: 1.2.0
+    optional: true
 
   pg-types@4.0.2:
     dependencies:
@@ -1253,28 +1267,34 @@ snapshots:
       pgpass: 1.0.5
     optionalDependencies:
       pg-cloudflare: 1.1.1
+    optional: true
 
   pgpass@1.0.5:
     dependencies:
       split2: 4.2.0
+    optional: true
 
-  postgres-array@2.0.0: {}
+  postgres-array@2.0.0:
+    optional: true
 
   postgres-array@3.0.2: {}
 
-  postgres-bytea@1.0.0: {}
+  postgres-bytea@1.0.0:
+    optional: true
 
   postgres-bytea@3.0.0:
     dependencies:
       obuf: 1.1.2
 
-  postgres-date@1.0.7: {}
+  postgres-date@1.0.7:
+    optional: true
 
   postgres-date@2.1.0: {}
 
   postgres-interval@1.2.0:
     dependencies:
       xtend: 4.0.2
+    optional: true
 
   postgres-interval@3.0.0: {}
 
@@ -1298,7 +1318,8 @@ snapshots:
 
   source-map@0.6.1: {}
 
-  split2@4.2.0: {}
+  split2@4.2.0:
+    optional: true
 
   tdigest@0.1.2:
     dependencies:
@@ -1315,6 +1336,7 @@ snapshots:
 
   undici-types@5.26.5: {}
 
-  xtend@4.0.2: {}
+  xtend@4.0.2:
+    optional: true
 
   zod@3.23.8: {}

@@ -1,3 +1,4 @@
+import { Hono } from 'hono/dist/types/jsx/intrinsic-elements';
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 import  {db} from "../drizzle/db";
