@@ -15,7 +15,7 @@ restaurantownerRouter.get("/restaurantowner/:id", getrestaurantowner)
 // create a restaurantowner 
 restaurantownerRouter.post("/restaurantowner", zValidator('json', restaurantownerSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.error, 400)
+        return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
     }
 }), createrestaurantowner)
 //update a restaurantowner

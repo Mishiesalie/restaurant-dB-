@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm/expressions";
-import db from "../drizzle/db";
+import { db} from "../drizzle/db";
 import { orderStatusRelationsType, order_status_table, orderStatusselect} from "../drizzle/schema";
 
 
@@ -11,7 +11,7 @@ export const orderstatusService = async (limit?: number): Promise<orderStatusRel
         });
     }
     
-    return await db.query.order_status_table.findMany();
+    return; await db.query.order_status_table.findMany();
 }
 
 

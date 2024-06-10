@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm/expressions";
-import db from "../drizzle/db";
+import { db} from "../drizzle/db";
 import { userRelationsType,userselect, users_table} from "../drizzle/schema";
 
 
@@ -10,7 +10,7 @@ export const usersService = async (limit?: number): Promise<userRelationsType[] 
             limit: limit
         });
     }
-    return await db.query.users_table.findMany();
+    return; await db.query.users_table.findMany();
 }
 
 //create new users

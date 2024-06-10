@@ -1,8 +1,8 @@
-import { Hono } from 'hono/dist/types/jsx/intrinsic-elements';
+import { Hono } from 'hono';
 import bcrypt from 'bcryptjs';
 import jwt from "jsonwebtoken";
 import  {db} from "../drizzle/db";
-import { Users,userRelationsType, userselect } from '../drizzle/schema';
+import { users_table,userRelationsType, userselect } from '../drizzle/schema';
 import {eq} from 'drizzle-orm';
 
 
@@ -11,8 +11,8 @@ const expiresIn = process.env.EXPIRES
 
 export const registerUser = async (user: userRelationsType) =>{
     //check if the user already exists
-    const existingUser = await db.query.Users.findFirst({
-        where: eq(Users.email, user.email)
+    const existingUser = await db.query.users_table.findFirst({
+        where: eq(users_table.email, user.email)
     });
 
     if (existingUser){
@@ -21,14 +21,14 @@ export const registerUser = async (user: userRelationsType) =>{
 
     //Hash the password
     const hashedPassword = await bcrypt.hash(user.password, 10);
-    await db.insert(Users).values({...user, password: hashedPassword});
+    await db.insert(users_table).values({...user, password: hashedPassword});
     return 'User registered successfully';
 };
 
 
 export const loginUser = async(email: string, password: string) =>{
-    const user = await db.query.users.findFirst({
-        where: eq(Users.email, email)
+    const user = await db.query.users_table.findFirst({
+        where: eq(users_table.email, email)
     });
     if(!user){
         throw new Error('User not found');

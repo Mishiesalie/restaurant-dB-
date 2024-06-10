@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm/expressions";
-import db from "../drizzle/db";
+import {db} from "../drizzle/db";
 import { orderRelationsType, orders_table, orderselect} from "../drizzle/schema";
 
 
@@ -10,7 +10,7 @@ export const orderService = async (limit?: number): Promise<orderRelationsType[]
             limit: limit
         });
     }
-    return await db.query.orders_table.findMany();
+    return; await db.query.orders_table.findMany();
 }
 
 export const getordersService = async (id: number): Promise<orderRelationsType | undefined> => {

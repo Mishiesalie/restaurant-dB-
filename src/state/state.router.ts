@@ -15,7 +15,7 @@ stateRouter.get("/users/:id", getstate)
 // create a user 
 stateRouter.post("/users", zValidator('json', stateSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.error, 400)
+        return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
     }
 }), createstate)
 

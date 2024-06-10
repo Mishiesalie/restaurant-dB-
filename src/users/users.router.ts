@@ -12,7 +12,7 @@ usersRouter.get("/users", listUsers);
 
 usersRouter.post("/users", zValidator('json', userSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.error, 400)
+        return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
     }
 }), createUser)
 
@@ -20,7 +20,7 @@ usersRouter.get("/users/:id", getUser)
 // create a user 
 usersRouter.post("/users", zValidator('json', userSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.error, 400)
+        return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
     }
 }), createUser)
 

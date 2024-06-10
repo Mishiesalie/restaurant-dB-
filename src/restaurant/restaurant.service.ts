@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm/expressions";
-import db from "../drizzle/db";
+import { db } from "../drizzle/db";
 import { restaurantRelationsType, restaurant_table, restaurantselect} from "../drizzle/schema";
 
 
@@ -10,7 +10,7 @@ export const restaurantService = async (limit?: number): Promise<restaurantRelat
             limit: limit
         });
     }
-    return await db.query.restaurant_table.findMany();
+    return; await db.query.restaurant_table.findMany();
 }
 
 export const getrestaurantService = async (id: number): Promise<restaurantRelationsType | undefined> => {

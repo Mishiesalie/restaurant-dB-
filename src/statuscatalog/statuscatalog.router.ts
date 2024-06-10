@@ -15,7 +15,7 @@ statuscatalogRouter.get("/users/:id", getstatusCatelog)
 // create a user 
 statuscatalogRouter.post("/users", zValidator('json', statusCatelogSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.error, 400)
+return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
     }
 }), createstatusCatelog)
 //update a user

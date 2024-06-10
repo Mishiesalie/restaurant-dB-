@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm/expressions";
-import db from "../drizzle/db";
+import { db} from "../drizzle/db";
 import { stateRelationsType, state_table, stateselect} from "../drizzle/schema";
 
 

@@ -16,7 +16,7 @@ restaurantRouter.get("/users/:id", getrestaurant)
 // create a restaurant 
 restaurantRouter.post("/users", zValidator('json', restaurantSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.error, 400)
+        return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
     }
 }), createrestaurant)
 
