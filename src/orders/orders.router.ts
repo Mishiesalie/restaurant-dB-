@@ -22,3 +22,10 @@ ordersRouter.post("/orders", zValidator('json', orderstatusSchema, (result, c) =
 ordersRouter.put("/orders/:id", updateorders)
 
 ordersRouter.delete("/orders/:id", deleteorders)
+
+// ordersRouter.post("/orders", zValidator(orderstatusSchema), (result, c) => {
+//   if (!result.success) {
+//     return c.json(result.error, 400);
+//   }
+//   //...
+// });

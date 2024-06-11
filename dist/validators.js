@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addressSchema = exports.driverSchema = exports.menuItemSchema = exports.orderMenuItemSchema = exports.orderstatusSchema = exports.restaurantownerSchema = exports.restaurantSchema = exports.ordersSchema = exports.statusCatelogSchema = exports.stateSchema = exports.citySchema = exports.userSchema = void 0;
+exports.registerUserSchema = exports.loginUserSchema = exports.addressSchema = exports.driverSchema = exports.menuItemSchema = exports.orderMenuItemSchema = exports.orderstatusSchema = exports.restaurantownerSchema = exports.restaurantSchema = exports.ordersSchema = exports.statusCatelogSchema = exports.stateSchema = exports.citySchema = exports.userSchema = void 0;
 const zod_1 = require("zod");
 exports.userSchema = zod_1.z.object({
     id: zod_1.z.number(),
@@ -103,4 +103,18 @@ exports.addressSchema = zod_1.z.object({
     user_id: (0, zod_1.number)(),
     created_at: (0, zod_1.string)(),
     updated_at: (0, zod_1.string)()
+});
+exports.loginUserSchema = zod_1.z.object({
+    login_id: (0, zod_1.number)(),
+    user_id: (0, zod_1.number)(),
+    password: (0, zod_1.string)(),
+    username: (0, zod_1.string)(),
+    role: (0, zod_1.string)()
+});
+exports.registerUserSchema = zod_1.z.object({
+    login_id: (0, zod_1.number)(),
+    user_id: (0, zod_1.number)(),
+    password: (0, zod_1.string)(),
+    username: (0, zod_1.string)(),
+    role: (0, zod_1.string)()
 });

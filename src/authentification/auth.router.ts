@@ -1,6 +1,7 @@
 // import { Hono } from 'hono';
 // import { register, login } from './auth.controller';
 // import { authenticateToken } from '../middlewares/authentification.middleware';
+// import { zValidator } from "@hono/zod-validator";
 
 // export const authRouter = new Hono();
 
@@ -16,6 +17,7 @@ import { Hono } from 'hono'
 import { registerUser, loginUser } from './auth.controller'
 import { registerUserSchema, loginUserSchema } from '../validators'
 import { ZodObject, ZodNumber, ZodString, ZodTypeAny } from 'zod';
+import { zValidator as honoZValidator } from "@hono/zod-validator";
 
 export const authRouter = new Hono();
 

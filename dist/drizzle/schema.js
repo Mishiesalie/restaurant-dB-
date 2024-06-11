@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commentRelations = exports.statusCatalogRelations = exports.orderStatusRelations = exports.orderMenuItemRelations = exports.categoryRelations = exports.menuItemRelations = exports.addressRelations = exports.restaurantOwnerRelations = exports.cityRelations = exports.restaurantRelations = exports.orderRelations = exports.driverRelations = exports.userRelations = exports.orders_table = exports.status_catalog_table = exports.order_status_table = exports.order_menu_item_table = exports.comment_table = exports.restaurant_owner_table = exports.state_table = exports.city_table = exports.category_table = exports.menu_items_table = exports.restaurant_table = exports.address_table = exports.driver_table = exports.users_table = void 0;
+exports.loginRelations = exports.login_table = exports.roleEnum = exports.commentRelations = exports.statusCatalogRelations = exports.orderStatusRelations = exports.orderMenuItemRelations = exports.categoryRelations = exports.menuItemRelations = exports.addressRelations = exports.restaurantOwnerRelations = exports.cityRelations = exports.restaurantRelations = exports.orderRelations = exports.driverRelations = exports.userRelations = exports.orders_table = exports.status_catalog_table = exports.order_status_table = exports.order_menu_item_table = exports.comment_table = exports.restaurant_owner_table = exports.state_table = exports.city_table = exports.category_table = exports.menu_items_table = exports.restaurant_table = exports.address_table = exports.driver_table = exports.users_table = void 0;
 const pg_core_1 = require("drizzle-orm/pg-core");
 const drizzle_orm_1 = require("drizzle-orm");
 //users
@@ -12,8 +12,8 @@ exports.users_table = (0, pg_core_1.pgTable)("users", {
     email: (0, pg_core_1.varchar)("email", { length: 100 }),
     email_verified: (0, pg_core_1.boolean)("email_verified"),
     password: (0, pg_core_1.varchar)("password", { length: 100 }),
-    created_at: (0, pg_core_1.timestamp)("created_at"),
-    updated_at: (0, pg_core_1.timestamp)("updated_at"),
+    created_at: (0, pg_core_1.date)("created_at"),
+    updated_at: (0, pg_core_1.date)("updated_at"),
 });
 //driver
 exports.driver_table = (0, pg_core_1.pgTable)("driver", {
@@ -23,9 +23,9 @@ exports.driver_table = (0, pg_core_1.pgTable)("driver", {
     car_year: (0, pg_core_1.varchar)("car_year"),
     user_id: (0, pg_core_1.integer)("city_id").notNull().references(() => exports.users_table.id, { onDelete: "cascade" }),
     online: (0, pg_core_1.boolean)("online"),
-    delivering: (0, pg_core_1.timestamp)("delivering"),
-    created_at: (0, pg_core_1.timestamp)("created_at"),
-    updated_at: (0, pg_core_1.timestamp)("updated_at"),
+    delivering: (0, pg_core_1.date)("delivering"),
+    created_at: (0, pg_core_1.date)("created_at"),
+    updated_at: (0, pg_core_1.date)("updated_at"),
 });
 //address
 exports.address_table = (0, pg_core_1.pgTable)("address", {
@@ -36,8 +36,8 @@ exports.address_table = (0, pg_core_1.pgTable)("address", {
     delivery_instructions: (0, pg_core_1.varchar)("delivery_instructions", { length: 100 }),
     city_id: (0, pg_core_1.integer)("city_id").notNull().references(() => exports.city_table.id, { onDelete: "cascade" }),
     user_id: (0, pg_core_1.integer)("user_id").notNull().references(() => exports.users_table.id, { onDelete: "cascade" }),
-    created_at: (0, pg_core_1.timestamp)("created_at"),
-    updated_at: (0, pg_core_1.timestamp)("updated_at"),
+    created_at: (0, pg_core_1.date)("created_at"),
+    updated_at: (0, pg_core_1.date)("updated_at"),
 });
 //restaurant
 exports.restaurant_table = (0, pg_core_1.pgTable)("restaurant", {
@@ -46,8 +46,8 @@ exports.restaurant_table = (0, pg_core_1.pgTable)("restaurant", {
     street_address: (0, pg_core_1.varchar)("street_address", { length: 100 }),
     zip_code: (0, pg_core_1.varchar)("zip_code", { length: 100 }),
     city_id: (0, pg_core_1.integer)("city_id").notNull().references(() => exports.city_table.id, { onDelete: "cascade" }),
-    created_at: (0, pg_core_1.timestamp)("created_at"),
-    updated_at: (0, pg_core_1.timestamp)("updated_at"),
+    created_at: (0, pg_core_1.date)("created_at"),
+    updated_at: (0, pg_core_1.date)("updated_at"),
 });
 //menu_items
 exports.menu_items_table = (0, pg_core_1.pgTable)("menu_items", {
@@ -59,8 +59,8 @@ exports.menu_items_table = (0, pg_core_1.pgTable)("menu_items", {
     ingredients: (0, pg_core_1.varchar)("ingredients", { length: 100 }),
     price: (0, pg_core_1.varchar)("price", { length: 100 }),
     active: (0, pg_core_1.boolean)("active"),
-    created_at: (0, pg_core_1.timestamp)("created_at"),
-    updated_at: (0, pg_core_1.timestamp)("updated_at"),
+    created_at: (0, pg_core_1.date)("created_at"),
+    updated_at: (0, pg_core_1.date)("updated_at"),
 });
 //category
 exports.category_table = (0, pg_core_1.pgTable)("category", {
@@ -95,8 +95,8 @@ exports.comment_table = (0, pg_core_1.pgTable)("comment", {
     comment_text: (0, pg_core_1.varchar)("comment_text", { length: 100 }),
     is_compliant: (0, pg_core_1.boolean)("is_compliant"),
     is_praise: (0, pg_core_1.boolean)("is_praise"),
-    created_at: (0, pg_core_1.timestamp)("created_at"),
-    updated_at: (0, pg_core_1.timestamp)("updated_at"),
+    created_at: (0, pg_core_1.date)("created_at"),
+    updated_at: (0, pg_core_1.date)("updated_at"),
 });
 //order_menu_item
 exports.order_menu_item_table = (0, pg_core_1.pgTable)("order_menu_item", {
@@ -113,7 +113,7 @@ exports.order_status_table = (0, pg_core_1.pgTable)("order_status", {
     id: (0, pg_core_1.serial)("id").primaryKey(),
     order_id: (0, pg_core_1.integer)("order_id").notNull().references(() => exports.orders_table.id, { onDelete: "cascade" }),
     status_catalog_id: (0, pg_core_1.integer)("status_catalog_id").notNull().references(() => exports.status_catalog_table.id, { onDelete: "cascade" }),
-    created_at: (0, pg_core_1.timestamp)("created_at")
+    created_at: (0, pg_core_1.date)("created_at")
 });
 //status catalog
 exports.status_catalog_table = (0, pg_core_1.pgTable)("status_catalog", {
@@ -133,8 +133,8 @@ exports.orders_table = (0, pg_core_1.pgTable)("orders", {
     discount: (0, pg_core_1.integer)("discount"),
     final_price: (0, pg_core_1.integer)("final_price"),
     comment: (0, pg_core_1.varchar)("comment", { length: 100 }),
-    created_at: (0, pg_core_1.timestamp)("created_at"),
-    updated_at: (0, pg_core_1.timestamp)("updated_at"),
+    created_at: (0, pg_core_1.date)("created_at"),
+    updated_at: (0, pg_core_1.date)("updated_at"),
 });
 // relationships
 // User relationships
@@ -305,5 +305,19 @@ exports.commentRelations = (0, drizzle_orm_1.relations)(exports.comment_table, (
     order: one(exports.orders_table, {
         fields: [exports.comment_table.order_id],
         references: [exports.orders_table.id]
+    })
+}));
+exports.roleEnum = (0, pg_core_1.pgEnum)("role", ["admin", "user"]);
+exports.login_table = (0, pg_core_1.pgTable)("login", {
+    login_id: (0, pg_core_1.serial)("id").primaryKey(),
+    user_id: (0, pg_core_1.integer)("user_id").notNull().references(() => exports.users_table.id, { onDelete: "cascade" }),
+    password: (0, pg_core_1.varchar)("password", { length: 100 }),
+    username: (0, pg_core_1.varchar)("username", { length: 100 }),
+    role: (0, exports.roleEnum)("role").default("user")
+});
+exports.loginRelations = (0, drizzle_orm_1.relations)(exports.login_table, ({ one }) => ({
+    user: one(exports.users_table, {
+        fields: [exports.login_table.user_id],
+        references: [exports.users_table.id]
     })
 }));
