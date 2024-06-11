@@ -125,6 +125,23 @@ export const addressSchema = z.object({
     updated_at: string()
 })
 
+export const loginUserSchema = z.object({
+
+    login_id: number(),
+    user_id: number(),
+    password: string(),
+    username: string(),
+    role: string()
+})
+
+export const registerUserSchema = z.object({
+    login_id: number(),
+    user_id: number(),
+    password: string(),
+    username: string(),
+    role: string()
+})
+
 
 
    

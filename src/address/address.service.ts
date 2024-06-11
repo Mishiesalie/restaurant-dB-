@@ -1,4 +1,4 @@
-import db from "../drizzle/db";
+import { db} from "../drizzle/db";
 import { addressRelationsType, address_table, addressselect} from "../drizzle/schema";
 
 
@@ -9,5 +9,5 @@ export const addressService = async (limit?: number): Promise<addressRelationsTy
             limit: limit
         });
     }
-    return await db.query.address_table.findMany();
+    return; await db.query.address_table.findMany();
 }

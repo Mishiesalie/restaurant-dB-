@@ -419,17 +419,22 @@ export type stateselect = typeof state_table.$inferSelect;
 
 export const roleEnum = pgEnum("role", ["admin", "user"])
 
-export const AuthOnUsertable = pgTable("auth_on_users", {
-    id: serial("id").primaryKey(),
+export const login_table = pgTable("login", {
+    login_id: serial("id").primaryKey(),
     user_id: integer("user_id").notNull().references(() => users_table.id, { onDelete: "cascade" }),
     password: varchar("password", { length: 100 }),
     username: varchar("username", { length: 100 }),
     role: roleEnum("role").default("user")
 });
 
-export const AuthOnUserRelations = relations(AuthOnUsertable, ({ one }) => ({
+export const loginRelations = relations(login_table, ({ one }) => ({
     user: one(users_table, {
-        fields: [AuthOnUsertable.user_id],
+        fields: [login_table.user_id],
         references: [users_table.id]
     })
 }));
+
+
+export type loginRelationsType = typeof login_table.$inferInsert;
+
+export type loginselect = typeof login_table.$inferSelect;

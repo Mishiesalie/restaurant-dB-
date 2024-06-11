@@ -46,7 +46,7 @@ import { csrf } from 'hono/csrf'
 import { trimTrailingSlash } from 'hono/trailing-slash'
 import { timeout } from 'hono/timeout'
 import { HTTPException } from 'hono/http-exception'
-import { prometheus } from '@hono/prometheus'
+import { authRouter } from './authentification/auth.router'
 
 
 
@@ -67,6 +67,46 @@ app.use(trimTrailingSlash()) //removes trailing slashes from the request URL
 app.use('/', timeout(10000, customTimeoutException))
 //3rd party middlewares
 app.use('*', registerMetrics)
+
+
+// default route
+app.get('/ok', (c) => {
+  return c.text('The server is running📢😏😏😏!')
+})
+app.get('/timeout', async (c) => {
+  await new Promise((resolve) => setTimeout(resolve, 11000))
+  return c.text("data after 5 seconds", 200)
+})
+app.get('/metrics', printMetrics)
+
+// custom route
+app.route("/", usersRouter)   // api/users
+app.route("/", cityRouter) // api/city
+app.route("/", addressRouter)
+app.route("/", stateRouter)
+app.route("/", categoryRouter)
+app.route("/", restaurantRouter)
+app.route("/", restaurantownerRouter)
+app.route("/", driversRouter)
+app.route("/", ordersRouter)
+app.route("/", commentsRouter)
+app.route("/", menuItemsRouter)
+app.route("/", orderMenuItemRouter)
+app.route("/", addressRouter)
+app.route("/", statuscatalogRouter)
+
+app.route("/", authRouter)   // api/auth/register   or api/auth/login
+
+
+
+serve({
+  fetch: app.fetch,
+  port: Number(process.env.PORT)
+})
+console.log(`Server is running on port ${process.env.PORT}`)
+
+
+
 
 
 
@@ -162,3 +202,7 @@ serve({
   port: Number(process.env.PORT) || 3000
 })
 console.log(`Server is running on port ${process.env.PORT} `)
+function prometheus(): { printMetrics: any; registerMetrics: any } {
+  throw new Error('Function not implemented.')
+}
+

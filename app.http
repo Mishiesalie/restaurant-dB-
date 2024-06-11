@@ -13,52 +13,52 @@ POST http://localhost:8000/city
 
 
 ####################
-GET http://localhost:8000/state
+GET http://localhost:8000/api/state
 
 
 
 ####################
-GET http://localhost:8000/category
+GET http://localhost:8000/api/category
 
 
 ####################
-GET http://localhost:8000/restaurant
+GET http://localhost:8000/api/restaurant
 
 
 ####################
-GET http://localhost:8000/restaurantowner
+GET http://localhost:8000/api/restaurantowner
 
 
 ####################
-GET http://localhost:8000/orders
+GET http://localhost:8000/api/orders
 
 
 ####################
-GET http://localhost:8000/drivers
+GET http://localhost:8000/api/drivers
 
 
 ####################
-GET http://localhost:8000/comments
+GET http://localhost:8000/api/comments
 
 
 ####################
-GET http://localhost:8000/menuitems
+GET http://localhost:8000/api/menuitems
 
 
 ####################
-GET http://localhost:8000/ordermenuitems
+GET http://localhost:8000/api/ordermenuitems
 
 
 ####################
-GET http://localhost:8000/address
+GET http://localhost:8000/api/address
 
 
 ####################
-GET http://localhost:8000/statuscatalog
+GET http://localhost:8000/api/statuscatalog
 
 
 ####################
-GET http://localhost:8000/orderstatus
+GET http://localhost:8000/api/orderstatus
 
 
 
@@ -77,7 +77,7 @@ GET http://localhost:8000/orderstatus
 
 
 #
-POST http://localhost:8000/users
+POST http://localhost:8000/api/users
 Content-Type: application/json
 
 {
