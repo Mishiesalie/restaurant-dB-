@@ -1,36 +1,43 @@
-import { eq } from "drizzle-orm/expressions";
-import {db} from "../drizzle/db";
-import { restaurantOwnerRelationsType, restaurant_owner_table, restaurantOwnerselect} from "../drizzle/schema";
+import db from "../drizzle/db"
+import { restaurantOwnerselect, restaurantOwnerInsert, restaurantOwnerTable } from "../drizzle/schema"
+import { eq } from "drizzle-orm";
 
-
-//get users from the database
-export const restaurantownerService = async (limit?: number): Promise<restaurantOwnerRelationsType[] | null> => {
-    if (limit) {
-        return await db.query.restaurant_owner_table.findMany({
-            limit: limit
-        });
+export const restaurantOwnerService = async (): Promise<restaurantOwnerselect[]> => {
+    try {
+        const restaurantOwner = await db.query.restaurantOwnerTable.findMany();
+        console.log('Restauurant owners fetched:', restaurantOwner);
+        return restaurantOwner;
+    } catch (error) {
+        console.error('Error fetching restaurant owners:', error);
+        throw error;
     }
-    return; await db.query.restaurant_owner_table.findMany();
 }
 
-
-export const getrestaurantownerService = async (id: number): Promise<restaurantOwnerRelationsType | undefined> => {
-    return await db.query.restaurant_owner_table.findFirst({
-        where: eq(restaurant_owner_table.id, id)
+export const oneRestaurantOwnerService = async (id: number): Promise<restaurantOwnerselect | undefined> => {
+    return await db.query.restaurantOwnerTable.findFirst({
+        where: eq(restaurantOwnerTable.id, id)
     })
 }
 
-export const createrestaurantownerService = async (restaurantowner: restaurantOwnerRelationsType) => {
-    await db.insert(restaurant_owner_table).values(restaurantowner)
-    return "restaurantowner created successfully";
+export const addRestaurantOwnerService = async (restaurantOwner: restaurantOwnerInsert) => {
+    await db.insert(restaurantOwnerTable).values(restaurantOwner)
+    return "restaurant Owner added successfully";
 }
 
-export const updaterestaurantownerService = async (id: number, restaurantowner: restaurantOwnerRelationsType) => {
-    await db.update(restaurant_owner_table).set(restaurantowner).where(eq(restaurant_owner_table.id, id))
-    return "restaurantowner updated successfully";
+export const updateRestaurantOwnerService = async (id: number, restaurantOwner: restaurantOwnerInsert) => {
+    try {
+        const searchedRestaurantOwner = await oneRestaurantOwnerService(id);
+        if (!searchedRestaurantOwner) {
+            return false;
+        }
+        await db.update(restaurantOwnerTable).set(restaurantOwner).where(eq(restaurantOwnerTable.id, id));
+        return "restaurant Owner updated successfully";
+    } catch (error) {
+        throw new Error("Failed to update restaurant Owner: ");
+    }
 }
 
-export const deleterestaurantownerService = async (id: number) => {
-    await db.delete(restaurant_owner_table).where(eq(restaurant_owner_table.id, id))
-    return "restaurantowner deleted successfully";
+export const deleteRestaurantOwnerService = async (id: number) => {
+    await db.delete(restaurantOwnerTable).where(eq(restaurantOwnerTable.id, id));
+    return "restaurant Owner deleted successfully"
 }

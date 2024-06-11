@@ -1,35 +1,43 @@
-import { eq } from "drizzle-orm/expressions";
-import db from "../drizzle/db";
-import { statusCatalogRelationsType, status_catalog_table, statusCatalogselect} from "../drizzle/schema";
+import db from "../drizzle/db"
+import { statusCatalogselect, statusCatalogInsert, statusCatalogTable } from "../drizzle/schema"
+import { eq } from "drizzle-orm";
 
-
-//get users from the database
-export const statuscatalogService = async (limit?: number): Promise<statusCatalogRelationsType[] | null> => {
-    if (limit) {
-        return await db.query.status_catalog_table.findMany({
-            limit: limit
-        });
+export const statusCatalogService = async (): Promise<statusCatalogselect[]> => {
+    try {
+        const statusCatalog = await db.query.statusCatalogTable.findMany();
+        console.log('Status catalog fetched:', statusCatalog);
+        return statusCatalog;
+    } catch (error) {
+        console.error('Error fetching status:', error);
+        throw error;
     }
-    return await db.query.status_catalog_table.findMany();
 }
 
-export const getstatusCatelogService = async (id: number): Promise<statusCatalogRelationsType | undefined> => {
-    return await db.query.status_catalog_table.findFirst({
-        where: eq(status_catalog_table.id, id)
+export const oneStatusCatalogService = async (id: number): Promise<statusCatalogselect | undefined> => {
+    return await db.query.statusCatalogTable.findFirst({
+        where: eq(statusCatalogTable.id, id)
     })
 }
 
-export const createstatusCatalogService = async (statusCatalog: statusCatalogRelationsType) => {
-    await db.insert(status_catalog_table).values(statusCatalog)
-    return "statusCatalog created successfully";
+export const addStatusCatalogService = async (statusCatalog: statusCatalogInsert) => {
+    await db.insert(statusCatalogTable).values(statusCatalog)
+    return "statusCatalog added successfully";
 }
 
-export const updatestatusCatalogService = async (id: number, statusCatalog: statusCatalogRelationsType) => {
-    await db.update(status_catalog_table).set(statusCatalog).where(eq(status_catalog_table.id, id))
-    return "statusCatalog updated successfully";
+export const updateStatusCatalogService = async (id: number, statusCatalog: statusCatalogInsert) => {
+    try {
+        const searchedStatusCatalog = await oneStatusCatalogService(id);
+        if (!searchedStatusCatalog) {
+            return false;
+        }
+        await db.update(statusCatalogTable).set(statusCatalog).where(eq(statusCatalogTable.id, id));
+        return "statusCatalog updated successfully";
+    } catch (error) {
+        throw new Error("Failed to update statusCatalog: ");
+    }
 }
 
-export const deletestatusCatalogService = async (id: number) => {
-    await db.delete(status_catalog_table).where(eq(status_catalog_table.id, id))
-    return "statusCatalog deleted successfully";
+export const deleteStatusCatalogService = async (id: number) => {
+    await db.delete(statusCatalogTable).where(eq(statusCatalogTable.id, id));
+    return "statusCatalog deleted successfully"
 }

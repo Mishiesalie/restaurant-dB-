@@ -1,38 +1,51 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteorderstatusService = exports.updateorderstatusService = exports.createorderstatusService = exports.getorderstatusService = exports.orderstatusService = void 0;
-const expressions_1 = require("drizzle-orm/expressions");
-const db_1 = require("../drizzle/db");
-const schema_1 = require("../drizzle/schema");
-//get orderstatus from the database
-const orderstatusService = async (limit) => {
-    if (limit) {
-        return await db_1.db.query.order_status_table.findMany({
-            limit: limit
-        });
-    }
-    return;
-    await db_1.db.query.order_status_table.findMany();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.orderstatusService = orderstatusService;
-const getorderstatusService = async (id) => {
-    return await db_1.db.query.order_status_table.findFirst({
-        where: (0, expressions_1.eq)(schema_1.order_status_table.id, id)
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteOrderStatusService = exports.updateOrderStatusService = exports.addOrderStatusService = exports.oneOrderStatusService = exports.orderStatusService = void 0;
+const db_1 = __importDefault(require("../drizzle/db"));
+const schema_1 = require("../drizzle/schema");
+const drizzle_orm_1 = require("drizzle-orm");
+const orderStatusService = async () => {
+    try {
+        const orderStatus = await db_1.default.query.orderStatusTable.findMany();
+        console.log('Order status fetched:', orderStatus);
+        return orderStatus;
+    }
+    catch (error) {
+        console.error('Error fetching Order status:', error);
+        throw error;
+    }
+};
+exports.orderStatusService = orderStatusService;
+const oneOrderStatusService = async (id) => {
+    return await db_1.default.query.orderStatusTable.findFirst({
+        where: (0, drizzle_orm_1.eq)(schema_1.orderStatusTable.id, id)
     });
 };
-exports.getorderstatusService = getorderstatusService;
-const createorderstatusService = async (orderstatus) => {
-    await db_1.db.insert(schema_1.order_status_table).values(orderstatus);
-    return "orderstatus created successfully";
+exports.oneOrderStatusService = oneOrderStatusService;
+const addOrderStatusService = async (orderStatus) => {
+    await db_1.default.insert(schema_1.orderStatusTable).values(orderStatus);
+    return "order Status added successfully";
 };
-exports.createorderstatusService = createorderstatusService;
-const updateorderstatusService = async (id, orderstatus) => {
-    await db_1.db.update(schema_1.order_status_table).set(orderstatus).where((0, expressions_1.eq)(schema_1.order_status_table.id, id));
-    return "orderstatus updated successfully";
+exports.addOrderStatusService = addOrderStatusService;
+const updateOrderStatusService = async (id, orderStatus) => {
+    try {
+        const searchedOrderStatus = await (0, exports.oneOrderStatusService)(id);
+        if (!searchedOrderStatus) {
+            return false;
+        }
+        await db_1.default.update(schema_1.orderStatusTable).set(orderStatus).where((0, drizzle_orm_1.eq)(schema_1.orderStatusTable.id, id));
+        return "order Status updated successfully";
+    }
+    catch (error) {
+        throw new Error("Failed to update orderStatus: ");
+    }
 };
-exports.updateorderstatusService = updateorderstatusService;
-const deleteorderstatusService = async (id) => {
-    await db_1.db.delete(schema_1.order_status_table).where((0, expressions_1.eq)(schema_1.order_status_table.id, id));
-    return "orderstatus deleted successfully";
+exports.updateOrderStatusService = updateOrderStatusService;
+const deleteOrderStatusService = async (id) => {
+    await db_1.default.delete(schema_1.orderStatusTable).where((0, drizzle_orm_1.eq)(schema_1.orderStatusTable.id, id));
+    return "order Status deleted successfully";
 };
-exports.deleteorderstatusService = deleteorderstatusService;
+exports.deleteOrderStatusService = deleteOrderStatusService;

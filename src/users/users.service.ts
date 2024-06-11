@@ -1,41 +1,46 @@
-import { eq } from "drizzle-orm/expressions";
-import { db} from "../drizzle/db";
-import { userRelationsType,userselect, users_table} from "../drizzle/schema";
+import db from "../drizzle/db"
+import { userselect, userInsert, userTable } from "../drizzle/schema"
+import {eq} from "drizzle-orm";
 
-
-//get users from the database
-export const usersService = async (limit?: number): Promise<userRelationsType[] | null> => {
-    if (limit) {
-        return await db.query.users_table.findMany({
-            limit: limit
-        });
+// all users
+export const userService = async (): Promise<userselect[]> => {
+    try {
+        const users = await db.query.userTable.findMany();
+        console.log('Users fetched:', users);
+        return users;
+    } catch (error) {
+        console.error('Error fetching restaurants:', error);
+        throw error;
     }
-    return; await db.query.users_table.findMany();
 }
-
-//create new users
-// export const createUserService = async (user: userRelationsType) => {
-//     await db.insert(users_table).values(user)
-//     return "User created successfully";
-// }
-
-export const getUserService = async (id: number): Promise<userRelationsType | undefined> => {
-    return await db.query.users_table.findFirst({
-        where: eq(users_table.id, id)
+export const oneUserService = async (id: number): Promise<userselect | undefined> => {
+    return await db.query.userTable.findFirst({
+        where: eq(userTable.id, id)
     })
 }
 
-export const createUserService = async (user: userRelationsType) => {
-    await db.insert(users_table).values(user)
-    return "User created successfully";
+export const addUserService = async (user: userInsert) => {
+    await db.insert(userTable).values(user)
+    return "User added successfully";
 }
 
-export const updateUserService = async (id: number, user: userRelationsType) => {
-    await db.update(users_table).set(user).where(eq(users_table.id, id))
+export const updateUserService = async (id: number, user: userInsert) => {
+    try {
+        // First, check if the user with the given ID exists
+        const searchedUser = await oneUserService(id);
+        if (!searchedUser) {
+            // If user not found, return false to indicate failure
+            return false;
+    }
+    await db.update(userTable).set(user).where(eq(userTable.id, id));
     return "User updated successfully";
+} catch (error) {
+        // Handle any errors
+        throw new Error("Failed to update user: ");
+    }
 }
 
 export const deleteUserService = async (id: number) => {
-    await db.delete(users_table).where(eq(users_table.id, id))
-    return "User deleted successfully";
+    await db.delete(userTable).where(eq(userTable.id, id));
+    return "User deleted successfully"
 }

@@ -1,32 +1,24 @@
 {
+
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": false,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "isolatedModules": false,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
-    "noImplicitThis": false,
-    "alwaysStrict": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "strict": true,
+    "skipLibCheck": true,
     "types": [
       "node"
     ],
     "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx"
-  },
+    "jsxImportSource": "hono/jsx",
+  }, 
   "include": [
     "src/**/*"
   ],
   "exclude": [
-    "node_modules",
-    "dist"
-  ]
+    "node_modules"]
 }

@@ -1,10 +1,22 @@
-import { Hono } from "hono";
-import { type Context } from "hono";
-import { listcomment} from "./comments.controller"
+import {Hono} from 'hono'
+import {commentController, oneCommentController, addCommentController, updateCommentController, deleteCommentController} from './comments.controller'
 import { zValidator } from "@hono/zod-validator";
+import { commentSchema } from "../validator";
 
+export const commentRouter = new Hono();
 
-export const commentsRouter = new Hono();
+commentRouter.get('comments', commentController);
+//one order
+commentRouter.get("/comments/:id", oneCommentController)
 
-//get all users      api/users
-commentsRouter.get("/comments", listcomment);
+commentRouter.post("comments", zValidator('json', commentSchema, (result, c) => {
+    if (!result.success) {
+        return c.json(result.error, 400)
+    }
+}), addCommentController)
+
+commentRouter.put("/comments:id", updateCommentController)
+
+commentRouter.delete("/comments/:id", deleteCommentController)
+
+export default commentRouter;

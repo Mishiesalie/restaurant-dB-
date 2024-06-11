@@ -1,35 +1,45 @@
-import { eq } from "drizzle-orm/expressions";
-import {db} from "../drizzle/db";
-import { orderRelationsType, orders_table, orderselect} from "../drizzle/schema";
+import db from "../drizzle/db"
+import { orderselect, orderInsert, orderTable } from "../drizzle/schema"
+import {eq} from 'drizzle-orm'
 
-
-//get users from the database
-export const orderService = async (limit?: number): Promise<orderRelationsType[] | null> => {
-    if (limit) {
-        return await db.query.orders_table.findMany({
-            limit: limit
-        });
+export const orderService = async (): Promise<orderselect[]> => {
+    try {
+        const orders = await db.query.orderTable.findMany();
+        console.log('Orders fetched:', orders);
+        return orders;
+    } catch (error) {
+        console.error('Error fetching orders:', error);
+        throw error;
     }
-    return; await db.query.orders_table.findMany();
 }
 
-export const getordersService = async (id: number): Promise<orderRelationsType | undefined> => {
-    return await db.query.orders_table.findFirst({
-        where: eq(orders_table.id, id)
+//one
+export const oneOrderService = async (id: number): Promise<orderselect | undefined> => {
+    return await db.query.orderTable.findFirst({
+        where: eq(orderTable.id, id)
     })
 }
-
-export const createordersService = async (user: orderRelationsType) => {
-    await db.insert(orders_table).values(user)
-    return "orders created successfully";
+// add
+export const addOrderService = async (order: orderInsert) => {
+    await db.insert(orderTable).values(order)
+    return "order added successfully";
 }
-
-export const updateordersService = async (id: number, user: orderRelationsType) => {
-    await db.update(orders_table).set(user).where(eq(orders_table.id, id))
-    return "orders updated successfully";
+//update
+export const updateOrderService = async (id: number, order: orderInsert) => {
+    try {
+        const searchedOrder = await oneOrderService(id);
+        if (!searchedOrder) {
+            return false;
+    }
+    await db.update(orderTable).set(order).where(eq(orderTable.id, id));
+    return "order updated successfully";
+} catch (error) {
+        // Handle any errors
+        throw new Error("Failed to update order: ");
+    }
 }
-
-export const deleteordersService = async (id: number) => {
-    await db.delete(orders_table).where(eq(orders_table.id, id))
-    return "orders deleted successfully";
+//delete
+export const deleteOrderService = async (id: number) => {
+    await db.delete(orderTable).where(eq(orderTable.id, id));
+    return "order deleted successfully"
 }

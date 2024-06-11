@@ -1,36 +1,43 @@
-import { eq } from "drizzle-orm/expressions";
-import db from "../drizzle/db";
-import { cityRelationsType, city_table, cityselect} from "../drizzle/schema";
+import db from "../drizzle/db"
+import { cityselect, cityInsert, cityTable } from "../drizzle/schema"
+import { eq } from "drizzle-orm";
 
-
-//get users from the database
-export const cityService = async (limit?: number): Promise<cityRelationsType[] | null> => {
-    if (limit) {
-        return await db.query.city_table.findMany({
-            limit: limit
-        });
+export const cityService = async (): Promise<cityselect[]> => {
+    try {
+        const city = await db.query.cityTable.findMany();
+        console.log('cities fetched:', city);
+        return city;
+    } catch (error) {
+        console.error('Error fetching cities:', error);
+        throw error;
     }
-    return await db.query.city_table.findMany();
 }
 
-
-export const getcityService = async (id: number): Promise<cityRelationsType | undefined> => {
-    return await db.query.city_table.findFirst({
-        where: eq(city_table.id, id)
+export const oneCityService = async (id: number): Promise<cityselect | undefined> => {
+    return await db.query.cityTable.findFirst({
+        where: eq(cityTable.id, id)
     })
 }
 
-export const createcityService = async (user: cityRelationsType) => {
-    await db.insert(city_table).values(user)
-    return "city created successfully";
+export const addCityService = async (city: cityInsert) => {
+    await db.insert(cityTable).values(city)
+    return "city added successfully";
 }
 
-export const updatecityService = async (id: number, user: cityRelationsType) => {
-    await db.update(city_table).set(user).where(eq(city_table.id, id))
-    return "city updated successfully";
+export const updateCityService = async (id: number, city: cityInsert) => {
+    try {
+        const searchedCity = await oneCityService(id);
+        if (!searchedCity) {
+            return false;
+        }
+        await db.update(cityTable).set(city).where(eq(cityTable.id, id));
+        return "city updated successfully";
+    } catch (error) {
+        throw new Error("Failed to update city: ");
+    }
 }
 
-export const deletecityService = async (id: number) => {
-    await db.delete(city_table).where(eq(city_table.id, id))
-    return "city deleted successfully";
+export const deleteCityService = async (id: number) => {
+    await db.delete(cityTable).where(eq(cityTable.id, id));
+    return "city deleted successfully"
 }

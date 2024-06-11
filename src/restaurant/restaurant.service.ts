@@ -1,36 +1,46 @@
-import { eq } from "drizzle-orm/expressions";
-import { db } from "../drizzle/db";
-import { restaurantRelationsType, restaurant_table, restaurantselect} from "../drizzle/schema";
+import db from "../drizzle/db"
+import { restaurantTable, restaurantselect, restaurantInsert} from "../drizzle/schema"
+import {eq} from 'drizzle-orm'
 
 
-//get users from the database
-export const restaurantService = async (limit?: number): Promise<restaurantRelationsType[] | null> => {
-    if (limit) {
-        return await db.query.restaurant_table.findMany({
-            limit: limit
-        });
+//All
+export const restaurantService = async (): Promise<restaurantselect[]> => {
+    try {
+        const restaurants = await db.query.restaurantTable.findMany();
+        console.log('Restaurants fetched:', restaurants);
+        return restaurants;
+    } catch (error) {
+        console.error('Error fetching restaurants:', error);
+        throw error;
     }
-    return; await db.query.restaurant_table.findMany();
 }
-
-export const getrestaurantService = async (id: number): Promise<restaurantRelationsType | undefined> => {
-    return await db.query.restaurant_table.findFirst({
-        where: eq(restaurant_table.id, id)
+//one
+export const oneRestaurantService = async (id: number): Promise<restaurantselect | undefined> => {
+    return await db.query.restaurantTable.findFirst({
+        where: eq(restaurantTable.id, id)
     })
 }
-
-export const createrestaurantService = async (restaurant: restaurantRelationsType) => {
-    await db.insert(restaurant_table).values(restaurant)
-    return "restaurant created successfully";
+// add
+export const addRestaurantService = async (restaurant: restaurantInsert) => {
+    await db.insert(restaurantTable).values(restaurant)
+    return "Restaurant added successfully";
 }
-
-export const updaterestaurantService = async (id: number, restaurant: restaurantRelationsType) => {
-    await db.update(restaurant_table).set(restaurant).where(eq(restaurant_table.id, id))
-    return "restaurant updated successfully";
+//update
+export const updateRestaurantService = async (id: number, restaurant: restaurantInsert) => {
+    try {
+        const searchedRestaurant = await oneRestaurantService(id);
+        if (!searchedRestaurant) {
+            return false;
+    }
+    await db.update(restaurantTable).set(restaurant).where(eq(restaurantTable.id, id));
+    return "Restaurant updated successfully";
+} catch (error) {
+        // Handle any errors
+        throw new Error("Failed to update restaurant: ");
+    }
 }
-
-export const deleterestaurantService = async (id: number) => {
-    await db.delete(restaurant_table).where(eq(restaurant_table.id, id))
-    return "restaurant deleted successfully";
+//delete
+export const deleteRestaurantService = async (id: number) => {
+    await db.delete(restaurantTable).where(eq(restaurantTable.id, id));
+    return "Restaurant deleted successfully"
 }
-

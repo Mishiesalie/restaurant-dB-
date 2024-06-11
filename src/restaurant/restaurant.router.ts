@@ -1,26 +1,28 @@
-import { Hono } from "hono";
-import { type Context } from "hono";
-import { listrestaurant, getrestaurant, createrestaurant, updaterestaurant, deleterestaurant} from "./restaurant.controller"
-import { zValidator } from "@hono/zod-validator";
-import { restaurantSchema} from "../validators"
+import {Hono} from 'hono'
+import {restaurantController, oneRestaurantController, addRestaurantController, deleteRestaurantController, updateRestaurantController} from './restaurant.controller'
+import {restaurantSchema} from '../validator'
+import { zValidator } from '@hono/zod-validator';
 
 
 export const restaurantRouter = new Hono();
 
-//get all restaurant     
-restaurantRouter.get("/restaurant", listrestaurant);
+restaurantRouter.get('/restaurants', restaurantController);
 
-//get a single restaurant    
-restaurantRouter.get("/users/:id", getrestaurant)
+//one restaurant
+restaurantRouter.get("/restaurants/:id", oneRestaurantController)
 
-// create a restaurant 
-restaurantRouter.post("/users", zValidator('json', restaurantSchema, (result, c) => {
+//add restaurant
+
+restaurantRouter.post("restaurants", zValidator('json', restaurantSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
+        return c.json(result.error, 400)
     }
-}), createrestaurant)
+}), addRestaurantController)
 
 //update a restaurant
-restaurantRouter.put("/users/:id", updaterestaurant)
+restaurantRouter.put("/restaurants/:id", updateRestaurantController)
 
-restaurantRouter.delete("/users/:id", deleterestaurant)
+restaurantRouter.delete("/restaurants/:id", deleteRestaurantController)
+
+
+export default restaurantRouter;

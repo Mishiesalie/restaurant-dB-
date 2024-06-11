@@ -1,34 +1,22 @@
-import { Hono } from "hono";
-import { type Context } from "hono";
-import { liststate, getstate, createstate, updatestate, deletestate} from "./state.controller"
+import {Hono} from 'hono'
+import {stateController, addState, oneStateController, updateStateController, deleteStateController} from './state.controller'
 import { zValidator } from "@hono/zod-validator";
-import { stateSchema } from "../validators";
+import { stateSchema } from "../validator";
 
 export const stateRouter = new Hono();
 
-//get all users      api/users
-stateRouter.get("/state", liststate);
+stateRouter.get('states', stateController);
 
-//get a single user    api/users/1
-stateRouter.get("/users/:id", getstate)
+stateRouter.get("/states/:id", oneStateController)
 
-// create a user 
-stateRouter.post("/users", zValidator('json', stateSchema, (result, c) => {
+stateRouter.post("states", zValidator('json', stateSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
+        return c.json(result.error, 400)
     }
-}), createstate)
+}), addState)
 
-//update a user
-stateRouter.put("/users/:id", updatestate)
+stateRouter.put("/states/:id", updateStateController)
 
-//delete a user
-stateRouter.delete("/users/:id", deletestate)
+stateRouter.delete("/states/:id", deleteStateController)
 
-
-// stateRouter.post("/users", zValidator('json', stateSchema, (result, c) => {
-//     if (!result.success) {
-//         return c.json(result.error, 400)
-//     }
-// }), creatstate)
-
+export default stateRouter;

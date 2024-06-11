@@ -1,29 +1,34 @@
 import { Context } from "hono";
-import { usersService, getUserService, createUserService, updateUserService, deleteUserService } from "./users.service";
+import { userService, oneUserService, addUserService,updateUserService, deleteUserService } from "./users.service";
 
-
-export const listUsers = async (c: Context) => {
-    try {
-        //limit the number of users to be returned
-
-        const limit = Number(c.req.query('limit'))
-
-        const data = await usersService(limit);
-        if (data == null || data.length == 0) {
-            return c.text("User not found", 404)
-        }
-        return c.json(data, 200);
-    } catch (error: any) {
-        return c.json({ error: error?.message }, 400)
+export const userController = async (c: Context) => {
+    try{
+        const users = await userService();
+        return c.json(users);
+    } catch (err: any) {
+        console.error(err)
+        return c.json({error: 'Internal Server Error'}, 500)
     }
+    
+}
+// one user
+export const oneUserController = async (c: Context) => {
+    const id = parseInt(c.req.param("id"));
+    if (isNaN(id)) return c.text("Invalid ID", 400);
+
+    const user = await oneUserService(id);
+    if (user == undefined) {
+        return c.text("User not found", 404);
+    }
+    return c.json(user, 200);
 }
 
-//create users
-export const createUser = async (c: Context) => {
+//add user
+
+export const addUserController = async (c: Context) => {
     try {
         const user = await c.req.json();
-        const createdUser = await usersService(user);
-
+        const createdUser = await addUserService(user);
 
         if (!createdUser) return c.text("User not created", 404);
         return c.json({ msg: createdUser }, 201);
@@ -33,26 +38,14 @@ export const createUser = async (c: Context) => {
     }
 }
 
-export const getUser = async (c: Context) => {
-    const id = parseInt(c.req.param("id"));
-    if (isNaN(id)) return c.text("Invalid ID", 400);
-
-    const user = await getUserService(id);
-    if (user == undefined) {
-        return c.text("User not found", 404);
-    }
-    return c.json(user, 200);
-}
-
-// update user
-export const updateUser = async (c: Context) => {
+export const updateUserController = async (c: Context) => {
     const id = parseInt(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
     const user = await c.req.json();
     try {
         // search for the user
-        const searchedUser = await getUserService(id);
+        const searchedUser = await oneUserService(id);
         if (searchedUser == undefined) return c.text("User not found", 404);
         // get the data and update it
         const res = await updateUserService(id, user);
@@ -65,13 +58,13 @@ export const updateUser = async (c: Context) => {
     }
 }
 
-export const deleteUser = async (c: Context) => {
+export const deleteUserController = async (c: Context) => {
     const id = Number(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
     try {
         //search for the user
-        const user = await getUserService(id);
+        const user = await oneUserService(id);
         if (user == undefined) return c.text("User not found", 404);
         //deleting the user
         const res = await deleteUserService(id);

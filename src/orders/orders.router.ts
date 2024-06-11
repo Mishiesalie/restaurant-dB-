@@ -1,31 +1,26 @@
-import { Hono } from "hono";
-import { type Context } from "hono";
-import { createorders, deleteorders, getorders, listorder, updateorders} from "./orders.controller"
-import { zValidator } from "@hono/zod-validator";
-import { orderstatusSchema } from "../validators";
-
+import {Hono} from 'hono'
+import { zValidator } from '@hono/zod-validator';
+import {ordersController, oneOrderController, addOrderController, updateOrderController, deleteOrderController} from './orders.controller'
+import {orderSchema} from '../validator'
 
 export const ordersRouter = new Hono();
 
-//get all orders
-ordersRouter.get("/orders", listorder);
+ordersRouter.get('orders', ordersController);
 
-//get a single order
-ordersRouter.get("/orders/:id", getorders)
-// create a user 
-ordersRouter.post("/orders", zValidator('json', orderstatusSchema, (result, c) => {
+//one order
+ordersRouter.get("/orders/:id", oneOrderController)
+
+//add order
+
+ordersRouter.post("orders", zValidator('json', orderSchema, (result, c) => {
     if (!result.success) {
         return c.json(result.error, 400)
     }
-}), createorders)
-//update a user
-ordersRouter.put("/orders/:id", updateorders)
+}), addOrderController)
 
-ordersRouter.delete("/orders/:id", deleteorders)
+//update a order
+ordersRouter.put("/orders/:id", updateOrderController)
 
-// ordersRouter.post("/orders", zValidator(orderstatusSchema), (result, c) => {
-//   if (!result.success) {
-//     return c.json(result.error, 400);
-//   }
-//   //...
-// });
+ordersRouter.delete("/orders/:id", deleteOrderController)
+
+export default ordersRouter;

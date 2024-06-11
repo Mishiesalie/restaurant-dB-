@@ -1,38 +1,51 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleterestaurantownerService = exports.updaterestaurantownerService = exports.createrestaurantownerService = exports.getrestaurantownerService = exports.restaurantownerService = void 0;
-const expressions_1 = require("drizzle-orm/expressions");
-const db_1 = require("../drizzle/db");
-const schema_1 = require("../drizzle/schema");
-//get users from the database
-const restaurantownerService = async (limit) => {
-    if (limit) {
-        return await db_1.db.query.restaurant_owner_table.findMany({
-            limit: limit
-        });
-    }
-    return;
-    await db_1.db.query.restaurant_owner_table.findMany();
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-exports.restaurantownerService = restaurantownerService;
-const getrestaurantownerService = async (id) => {
-    return await db_1.db.query.restaurant_owner_table.findFirst({
-        where: (0, expressions_1.eq)(schema_1.restaurant_owner_table.id, id)
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.deleteRestaurantOwnerService = exports.updateRestaurantOwnerService = exports.addRestaurantOwnerService = exports.oneRestaurantOwnerService = exports.restaurantOwnerService = void 0;
+const db_1 = __importDefault(require("../drizzle/db"));
+const schema_1 = require("../drizzle/schema");
+const drizzle_orm_1 = require("drizzle-orm");
+const restaurantOwnerService = async () => {
+    try {
+        const restaurantOwner = await db_1.default.query.restaurantOwnerTable.findMany();
+        console.log('Restauurant owners fetched:', restaurantOwner);
+        return restaurantOwner;
+    }
+    catch (error) {
+        console.error('Error fetching restaurant owners:', error);
+        throw error;
+    }
+};
+exports.restaurantOwnerService = restaurantOwnerService;
+const oneRestaurantOwnerService = async (id) => {
+    return await db_1.default.query.restaurantOwnerTable.findFirst({
+        where: (0, drizzle_orm_1.eq)(schema_1.restaurantOwnerTable.id, id)
     });
 };
-exports.getrestaurantownerService = getrestaurantownerService;
-const createrestaurantownerService = async (restaurantowner) => {
-    await db_1.db.insert(schema_1.restaurant_owner_table).values(restaurantowner);
-    return "restaurantowner created successfully";
+exports.oneRestaurantOwnerService = oneRestaurantOwnerService;
+const addRestaurantOwnerService = async (restaurantOwner) => {
+    await db_1.default.insert(schema_1.restaurantOwnerTable).values(restaurantOwner);
+    return "restaurant Owner added successfully";
 };
-exports.createrestaurantownerService = createrestaurantownerService;
-const updaterestaurantownerService = async (id, restaurantowner) => {
-    await db_1.db.update(schema_1.restaurant_owner_table).set(restaurantowner).where((0, expressions_1.eq)(schema_1.restaurant_owner_table.id, id));
-    return "restaurantowner updated successfully";
+exports.addRestaurantOwnerService = addRestaurantOwnerService;
+const updateRestaurantOwnerService = async (id, restaurantOwner) => {
+    try {
+        const searchedRestaurantOwner = await (0, exports.oneRestaurantOwnerService)(id);
+        if (!searchedRestaurantOwner) {
+            return false;
+        }
+        await db_1.default.update(schema_1.restaurantOwnerTable).set(restaurantOwner).where((0, drizzle_orm_1.eq)(schema_1.restaurantOwnerTable.id, id));
+        return "restaurant Owner updated successfully";
+    }
+    catch (error) {
+        throw new Error("Failed to update restaurant Owner: ");
+    }
 };
-exports.updaterestaurantownerService = updaterestaurantownerService;
-const deleterestaurantownerService = async (id) => {
-    await db_1.db.delete(schema_1.restaurant_owner_table).where((0, expressions_1.eq)(schema_1.restaurant_owner_table.id, id));
-    return "restaurantowner deleted successfully";
+exports.updateRestaurantOwnerService = updateRestaurantOwnerService;
+const deleteRestaurantOwnerService = async (id) => {
+    await db_1.default.delete(schema_1.restaurantOwnerTable).where((0, drizzle_orm_1.eq)(schema_1.restaurantOwnerTable.id, id));
+    return "restaurant Owner deleted successfully";
 };
-exports.deleterestaurantownerService = deleterestaurantownerService;
+exports.deleteRestaurantOwnerService = deleteRestaurantOwnerService;

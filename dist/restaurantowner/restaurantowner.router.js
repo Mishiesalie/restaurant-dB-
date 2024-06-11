@@ -1,21 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.restaurantownerRouter = void 0;
+exports.restaurantOwnerRouter = void 0;
 const hono_1 = require("hono");
-const restaurantowner_controller_1 = require("./restaurantowner.controller");
+const restaurantOwner_controller_1 = require("./restaurantOwner.controller");
+const validator_1 = require("../validator");
 const zod_validator_1 = require("@hono/zod-validator");
-const validators_1 = require("../validators");
-exports.restaurantownerRouter = new hono_1.Hono();
-//get all restaurantowner      api/users
-exports.restaurantownerRouter.get("/restaurantowner", restaurantowner_controller_1.listrestaurantowner);
-//get a single restaurantowner    api/users/1
-exports.restaurantownerRouter.get("/restaurantowner/:id", restaurantowner_controller_1.getrestaurantowner);
-// create a restaurantowner 
-exports.restaurantownerRouter.post("/restaurantowner", (0, zod_validator_1.zValidator)('json', validators_1.restaurantownerSchema, (result, c) => {
+exports.restaurantOwnerRouter = new hono_1.Hono();
+exports.restaurantOwnerRouter.get('restaurant-owners', restaurantOwner_controller_1.restaurantOwnerController);
+exports.restaurantOwnerRouter.get("/restaurant-owners/:id", restaurantOwner_controller_1.oneRestaurantOwnerController);
+exports.restaurantOwnerRouter.post("restaurant-owners", (0, zod_validator_1.zValidator)('json', validator_1.restaurantOwnerSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.success ? result.data : { error: 'Validation failed' }, result.success ? 200 : 400);
+        return c.json(result.error, 400);
     }
-}), restaurantowner_controller_1.createrestaurantowner);
-//update a restaurantowner
-exports.restaurantownerRouter.put("/restaurantowner/:id", restaurantowner_controller_1.updaterestaurantowner);
-exports.restaurantownerRouter.delete("/restaurantowner/:id", restaurantowner_controller_1.deleterestaurantowner);
+}), restaurantOwner_controller_1.addRestaurantOwnerController);
+exports.restaurantOwnerRouter.put("/restaurant-owners/:id", restaurantOwner_controller_1.updateRestaurantOwnerController);
+exports.restaurantOwnerRouter.delete("/restaurant-owners/:id", restaurantOwner_controller_1.deleteRestaurantOwnerController);
+exports.default = exports.restaurantOwnerRouter;

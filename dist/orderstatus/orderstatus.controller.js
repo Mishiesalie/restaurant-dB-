@@ -1,86 +1,78 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteorderstatus = exports.updateorderstatus = exports.createorderstatus = exports.getorderstatus = exports.listorderstatus = void 0;
-const orderstatus_service_1 = require("./orderstatus.service");
-const listorderstatus = async (c) => {
+exports.deleteOrderStatusController = exports.updateOrderStatusController = exports.addOrderStatusController = exports.oneOrderStatusController = exports.orderStatusController = void 0;
+const orderStatus_service_1 = require("./orderStatus.service");
+const orderStatusController = async (c) => {
     try {
-        //limit the number of users to be returned
-        const limit = Number(c.req.query('limit'));
-        const data = await (0, orderstatus_service_1.orderstatusService)(limit);
-        if (data == null || data.length == 0) {
-            return c.text("orderstatus not found", 404);
-        }
-        return c.json(data, 200);
+        const orderStatus = await (0, orderStatus_service_1.orderStatusService)();
+        return c.json(orderStatus);
+    }
+    catch (err) {
+        console.error(err);
+        return c.json({ error: 'Internal Server Error' }, 500);
+    }
+};
+exports.orderStatusController = orderStatusController;
+const oneOrderStatusController = async (c) => {
+    const id = parseInt(c.req.param("id"));
+    if (isNaN(id))
+        return c.text("Invalid ID", 400);
+    const orderStatus = await (0, orderStatus_service_1.oneOrderStatusService)(id);
+    if (orderStatus == undefined) {
+        return c.text("order Status not found", 404);
+    }
+    return c.json(orderStatus, 200);
+};
+exports.oneOrderStatusController = oneOrderStatusController;
+//add orderStatus
+const addOrderStatusController = async (c) => {
+    try {
+        const orderStatus = await c.req.json();
+        const createdOrderStatus = await (0, orderStatus_service_1.addOrderStatusService)(orderStatus);
+        if (!createdOrderStatus)
+            return c.text("Order status not created", 404);
+        return c.json({ msg: createdOrderStatus }, 201);
     }
     catch (error) {
         return c.json({ error: error?.message }, 400);
     }
 };
-exports.listorderstatus = listorderstatus;
-const getorderstatus = async (c) => {
+exports.addOrderStatusController = addOrderStatusController;
+// update orderStatus
+const updateOrderStatusController = async (c) => {
     const id = parseInt(c.req.param("id"));
     if (isNaN(id))
         return c.text("Invalid ID", 400);
-    const orderstatus = await (0, orderstatus_service_1.getorderstatusService)(id);
-    if (orderstatus == undefined) {
-        return c.text("orderstatus not found", 404);
-    }
-    return c.json(orderstatus, 200);
-};
-exports.getorderstatus = getorderstatus;
-const createorderstatus = async (c) => {
+    const user = await c.req.json();
     try {
-        const orderstatus = await c.req.json();
-        const createdorderstatus = await (0, orderstatus_service_1.createorderstatusService)(orderstatus);
-        if (!createdorderstatus)
-            return c.text("orderstatus not created", 404);
-        return c.json({ msg: createdorderstatus }, 201);
-    }
-    catch (error) {
-        return c.json({ error: error?.message }, 400);
-    }
-};
-exports.createorderstatus = createorderstatus;
-const updateorderstatus = async (c) => {
-    const id = parseInt(c.req.param("id"));
-    if (isNaN(id))
-        return c.text("Invalid ID", 400);
-    const orderstatus = await c.req.json();
-    try {
-        // search for the orderstatus
-        const searchedUser = await (0, orderstatus_service_1.getorderstatusService)(id);
-        if (searchedUser == undefined)
-            return c.text("orderstatus not found", 404);
-        // get the data and update it
-        const res = await (0, orderstatus_service_1.updateorderstatusService)(id, orderstatus);
-        // return a success message
+        const searchedOrderStatus = await (0, orderStatus_service_1.oneOrderStatusService)(id);
+        if (searchedOrderStatus == undefined)
+            return c.text("order Status not found", 404);
+        const res = await (0, orderStatus_service_1.updateOrderStatusService)(id, user);
         if (!res)
-            return c.text("orderstatus not updated", 404);
-        orderstatus;
+            return c.text("order Status not updated", 404);
         return c.json({ msg: res }, 201);
     }
     catch (error) {
         return c.json({ error: error?.message }, 400);
     }
 };
-exports.updateorderstatus = updateorderstatus;
-const deleteorderstatus = async (c) => {
+exports.updateOrderStatusController = updateOrderStatusController;
+const deleteOrderStatusController = async (c) => {
     const id = Number(c.req.param("id"));
     if (isNaN(id))
         return c.text("Invalid ID", 400);
     try {
-        //search for the orderstatus
-        const orderstatus = await (0, orderstatus_service_1.getorderstatusService)(id);
-        if (orderstatus == undefined)
-            return c.text("orderstatus not found", 404);
-        //deleting the orderstatus
-        const res = await (0, orderstatus_service_1.deleteorderstatusService)(id);
+        const orderStatus = await (0, orderStatus_service_1.oneOrderStatusService)(id);
+        if (orderStatus == undefined)
+            return c.text("order Status not found", 404);
+        const res = await (0, orderStatus_service_1.deleteOrderStatusService)(id);
         if (!res)
-            return c.text("orderstatus not deleted", 404);
+            return c.text("order Status not deleted", 404);
         return c.json({ msg: res }, 201);
     }
     catch (error) {
         return c.json({ error: error?.message }, 400);
     }
 };
-exports.deleteorderstatus = deleteorderstatus;
+exports.deleteOrderStatusController = deleteOrderStatusController;

@@ -1,59 +1,52 @@
 import { Context } from "hono";
-import { restaurantService, createrestaurantService, getrestaurantService, updaterestaurantService, deleterestaurantService } from "./restaurant.service";
+import { restaurantService, oneRestaurantService, addRestaurantService, updateRestaurantService, deleteRestaurantService } from "./restaurant.service";
 
-export const listrestaurant = async (c: Context) => {
-    try {
-        //limit the number of users to be returned
-
-        const limit = Number(c.req.query('limit'))
-
-        const data = await restaurantService(limit);
-        if (data == null || data.length == 0) {
-            return c.text("restaurant not found", 404)
-        }
-        return c.json(data, 200);
-    } catch (error: any) {
-        return c.json({ error: error?.message }, 400)
+export const restaurantController = async (c: Context) => {
+    try{
+        const restaurants = await restaurantService();
+        return c.json(restaurants);
+    } catch (err: any) {
+        console.error(err)
+        return c.json({error: 'Internal Server Error'}, 500)
     }
+    
 }
-
-export const getrestaurant = async (c: Context) => {
+export const oneRestaurantController = async (c: Context) => {
     const id = parseInt(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
-    const restaurant = await getrestaurantService(id);
+    const restaurant = await oneRestaurantService(id);
     if (restaurant == undefined) {
-        return c.text("restaurant not found", 404);
+        return c.text("Restaurant not found", 404);
     }
     return c.json(restaurant, 200);
 }
-export const createrestaurant = async (c: Context) => {
+
+//add restaurant
+
+export const addRestaurantController = async (c: Context) => {
     try {
         const restaurant = await c.req.json();
-        const createdrestaurant = await createrestaurantService(restaurant);
+        const createdRestaurant = await addRestaurantService(restaurant);
 
-
-        if (!createdrestaurant) return c.text("restaurant not created", 404);
-        return c.json({ msg: createdrestaurant }, 201);
+        if (!createdRestaurant) return c.text("Restaurant not created", 404);
+        return c.json({ msg: createdRestaurant }, 201);
 
     } catch (error: any) {
         return c.json({ error: error?.message }, 400)
     }
 }
 
-export const updaterestaurant = async (c: Context) => {
+export const updateRestaurantController = async (c: Context) => {
     const id = parseInt(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
     const restaurant = await c.req.json();
     try {
-        // search for the restaurant
-        const searchedrestaurant = await getrestaurantService(id);
-        if (searchedrestaurant == undefined) return c.text("User not found", 404);
-        // get the data and update it
-        const res = await updaterestaurantService(id, restaurant);
-        // return a success message
-        if (!res) return c.text("restaurant not updated", 404);
+        const searchedRestaurant = await oneRestaurantService(id);
+        if (searchedRestaurant == undefined) return c.text("Restaurant not found", 404);
+        const res = await updateRestaurantService(id, restaurant);
+        if (!res) return c.text("Restaurant not updated", 404);
 
         return c.json({ msg: res }, 201);
     } catch (error: any) {
@@ -61,17 +54,15 @@ export const updaterestaurant = async (c: Context) => {
     }
 }
 
-export const deleterestaurant = async (c: Context) => {
+export const deleteRestaurantController = async (c: Context) => {
     const id = Number(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
     try {
-        //search for the restaurant
-        const restaurant = await getrestaurantService(id);
-        if (restaurant == undefined) return c.text("restaurant not found", 404);
-        //deleting the restaurant
-        const res = await deleterestaurantService(id);
-        if (!res) return c.text("restaurant not deleted", 404);
+        const restaurant = await oneRestaurantService(id);
+        if (restaurant == undefined) return c.text("Restaurant not found", 404);
+        const res = await deleteRestaurantService(id);
+        if (!res) return c.text("Restaurant not deleted", 404);
 
         return c.json({ msg: res }, 201);
     } catch (error: any) {

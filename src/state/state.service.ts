@@ -1,35 +1,46 @@
-import { eq } from "drizzle-orm/expressions";
-import { db} from "../drizzle/db";
-import { stateRelationsType, state_table, stateselect} from "../drizzle/schema";
+import db from "../drizzle/db"
+import { stateselect, stateInsert, stateTable } from "../drizzle/schema"
+import {eq} from "drizzle-orm";
 
 
-//get users from the database
-export const stateService = async (limit?: number): Promise<stateRelationsType[] | null> => {
-    if (limit) {
-        return await db.query.state_table.findMany({
-            limit: limit
-        });
+export const stateService = async (): Promise<stateselect[]> => {
+    try {
+        const state = await db.query.stateTable.findMany();
+        console.log('States fetched:', state);
+        return state;
+    } catch (error) {
+        console.error('Error fetching states:', error);
+        throw error;
     }
-    return await db.query.state_table.findMany();
 }
-
-export const getstateService = async (id: number): Promise<stateRelationsType | undefined> => {
-    return await db.query.state_table.findFirst({
-        where: eq(state_table.id, id)
+export const oneStateService = async (id: number): Promise<stateselect | undefined> => {
+    return await db.query.stateTable.findFirst({
+        where: eq(stateTable.id, id)
     })
 }
 
-export const createstateService = async (user: stateRelationsType) => {
-    await db.insert(state_table).values(user)
-    return "state created successfully";
+export const addStateService = async (state: stateInsert) => {
+    await db.insert(stateTable).values(state)
+    return "State added successfully";
 }
 
-export const updatestateService = async (id: number, user: stateRelationsType) => {
-    await db.update(state_table).set(user).where(eq(state_table.id, id))
-    return "state updated successfully";
+export const updateStateService = async (id: number, state: stateInsert) => {
+    try {
+        // First, check if the user with the given ID exists
+        const searchedState = await oneStateService(id);
+        if (!searchedState) {
+            // If user not found, return false to indicate failure
+            return false;
+    }
+    await db.update(stateTable).set(state).where(eq(stateTable.id, id));
+    return "State updated successfully";
+} catch (error) {
+        // Handle any errors
+        throw new Error("Failed to update state: ");
+    }
 }
 
-export const deletestateService = async (id: number) => {
-    await db.delete(state_table).where(eq(state_table.id, id))
-    return "state deleted successfully";
+export const deleteStateService = async (id: number) => {
+    await db.delete(stateTable).where(eq(stateTable.id, id));
+    return "State deleted successfully"
 }

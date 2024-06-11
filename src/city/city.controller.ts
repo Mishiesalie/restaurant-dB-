@@ -1,40 +1,35 @@
 import { Context } from "hono";
-import { cityService, getcityService, createcityService, updatecityService, deletecityService} from "./city.service";
+import { cityService, oneCityService, addCityService, updateCityService, deleteCityService } from "./city.service";
 
-export const listcity = async (c: Context) => {
+export const cityController = async (c: Context) => {
     try {
-        //limit the number of users to be returned
-
-        const limit = Number(c.req.query('limit'))
-
-        const data = await cityService(limit);
-        if (data == null || data.length == 0) {
-            return c.text("city not found", 404)
-        }
-        return c.json(data, 200);
-    } catch (error: any) {
-        return c.json({ error: error?.message }, 400)
+        const city = await cityService();
+        return c.json(city);
+    } catch (err: any) {
+        console.error(err)
+        return c.json({ error: 'Internal Server Error' }, 500)
     }
 }
 
-
-export const getcity = async (c: Context) => {
+export const oneCityController = async (c: Context) => {
     const id = parseInt(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
-    const city = await getcityService(id);
+    const city = await oneCityService(id);
     if (city == undefined) {
         return c.text("city not found", 404);
     }
     return c.json(city, 200);
 }
-export const createcity = async (c: Context) => {
+
+//add city
+
+export const addCityController = async (c: Context) => {
     try {
         const city = await c.req.json();
-        const createdcity = await createcityService(city);
+        const createdcity = await addCityService(city);
 
-
-        if (!createdcity) return c.text("city not created", 404);
+        if (!createdcity) return c.text("User not created", 404);
         return c.json({ msg: createdcity }, 201);
 
     } catch (error: any) {
@@ -42,18 +37,20 @@ export const createcity = async (c: Context) => {
     }
 }
 
-export const updatecity = async (c: Context) => {
+// update city
+
+export const updateCityController = async (c: Context) => {
     const id = parseInt(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
-    const city = await c.req.json();
+    const user = await c.req.json();
     try {
-        // search for the user
-        const searchedUser = await getcityService(id);
-        if (searchedUser == undefined) return c.text("city not found", 404);
-        // get the data and update it
-        const res = await updatecityService(id, city);
-        // return a success message
+
+        const searchedcity = await oneCityService(id);
+        if (searchedcity == undefined) return c.text("city not found", 404);
+
+        const res = await updateCityService(id, user);
+
         if (!res) return c.text("city not updated", 404);
 
         return c.json({ msg: res }, 201);
@@ -62,16 +59,15 @@ export const updatecity = async (c: Context) => {
     }
 }
 
-export const deletecity = async (c: Context) => {
+export const deleteCityController = async (c: Context) => {
     const id = Number(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
     try {
-        //search for the city
-        const city = await getcityService(id);
+        const city = await oneCityService(id);
         if (city == undefined) return c.text("city not found", 404);
-        //deleting the city
-        const res = await deletecityService(id);
+
+        const res = await deleteCityService(id);
         if (!res) return c.text("city not deleted", 404);
 
         return c.json({ msg: res }, 201);

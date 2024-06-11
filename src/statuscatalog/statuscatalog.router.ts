@@ -1,24 +1,23 @@
-import { Hono } from "hono";
-import { type Context } from "hono";
-import { liststatuscatalog, getstatusCatelog, createstatusCatelog, updatestatusCatelog, deletestatusCatelog} from "./statuscatalog.controller"
-import { zValidator } from "@hono/zod-validator";
-import { statusCatelogSchema } from "../validators";
+import { Hono } from 'hono'
+import { statusCatalogController, addStatusCatalogController, oneStatusCatalogController, updateStatusCatalogController, deleteStatusCatalogController } from './statusCatalog.controller'
+import { statusCatalogSchema } from '../validator'
+import { zValidator } from '@hono/zod-validator'
 
 
-export const statuscatalogRouter = new Hono();
+export const statusCatalogRouter = new Hono();
 
-//get all users      api/users
-statuscatalogRouter.get("/statuscatalog", liststatuscatalog);
+statusCatalogRouter.get('status-catalogs', statusCatalogController);
 
-//get a single user    api/users/1
-statuscatalogRouter.get("/users/:id", getstatusCatelog)
-// create a user 
-statuscatalogRouter.post("/users", zValidator('json', statusCatelogSchema, (result, c) => {
+statusCatalogRouter.get("/status-catalogs/:id", oneStatusCatalogController)
+
+statusCatalogRouter.post("status-catalogs", zValidator('json', statusCatalogSchema, (result, c) => {
     if (!result.success) {
-return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
+        return c.json(result.error, 400)
     }
-}), createstatusCatelog)
-//update a user
-statuscatalogRouter.put("/users/:id", updatestatusCatelog)
+}), addStatusCatalogController)
 
-statuscatalogRouter.delete("/users/:id", deletestatusCatelog)
+statusCatalogRouter.put("/status-catalogs/:id", updateStatusCatalogController)
+
+statusCatalogRouter.delete("/status-catalogs/:id", deleteStatusCatalogController)
+
+export default statusCatalogRouter;

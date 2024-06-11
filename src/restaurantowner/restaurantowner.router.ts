@@ -1,24 +1,23 @@
-import { Hono } from "hono";
-import { type Context } from "hono";
-import { listrestaurantowner, getrestaurantowner, createrestaurantowner, updaterestaurantowner, deleterestaurantowner} from "./restaurantowner.controller"
-import { zValidator } from "@hono/zod-validator";
-import { restaurantownerSchema } from "../validators";
+import { Hono } from 'hono'
+import { restaurantOwnerController, addRestaurantOwnerController, oneRestaurantOwnerController, updateRestaurantOwnerController, deleteRestaurantOwnerController } from './restaurantOwner.controller'
+import { restaurantOwnerSchema } from '../validator'
+import { zValidator } from '@hono/zod-validator'
 
 
-export const restaurantownerRouter = new Hono();
+export const restaurantOwnerRouter = new Hono();
 
-//get all restaurantowner      api/users
-restaurantownerRouter.get("/restaurantowner", listrestaurantowner);
+restaurantOwnerRouter.get('restaurant-owners', restaurantOwnerController);
 
-//get a single restaurantowner    api/users/1
-restaurantownerRouter.get("/restaurantowner/:id", getrestaurantowner)
-// create a restaurantowner 
-restaurantownerRouter.post("/restaurantowner", zValidator('json', restaurantownerSchema, (result, c) => {
+restaurantOwnerRouter.get("/restaurant-owners/:id", oneRestaurantOwnerController)
+
+restaurantOwnerRouter.post("restaurant-owners", zValidator('json', restaurantOwnerSchema, (result, c) => {
     if (!result.success) {
-        return c.json(result.success? result.data : { error: 'Validation failed' }, result.success? 200 : 400);
+        return c.json(result.error, 400)
     }
-}), createrestaurantowner)
-//update a restaurantowner
-restaurantownerRouter.put("/restaurantowner/:id", updaterestaurantowner)
+}), addRestaurantOwnerController)
 
-restaurantownerRouter.delete("/restaurantowner/:id", deleterestaurantowner)
+restaurantOwnerRouter.put("/restaurant-owners/:id", updateRestaurantOwnerController)
+
+restaurantOwnerRouter.delete("/restaurant-owners/:id", deleteRestaurantOwnerController)
+
+export default restaurantOwnerRouter;

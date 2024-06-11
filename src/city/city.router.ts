@@ -1,29 +1,23 @@
-import { Hono } from "hono";
-import { type Context } from "hono";
-import { deletecity, listcity, updatecity, getcity, createcity, } from "./city.controller"
-import { zValidator } from "@hono/zod-validator";
-import { citySchema } from "../validators";
+import { Hono } from 'hono'
+import { cityController, addCityController, oneCityController, updateCityController, deleteCityController } from './city.controller'
+import { citySchema } from '../validator'
+import { zValidator } from '@hono/zod-validator'
 
 
 export const cityRouter = new Hono();
 
-//get all city
-cityRouter.get("/city", listcity);
+cityRouter.get('cities', cityController);
 
+cityRouter.get("/cities/:id", oneCityController)
 
-//get a single city    
-
-cityRouter.get("/city/:id", getcity)
-
-// create a city 
-cityRouter.post("/city", zValidator('json', citySchema, (result, c) => {
+cityRouter.post("cities", zValidator('json', citySchema, (result, c) => {
     if (!result.success) {
         return c.json(result.error, 400)
     }
-}), createcity)
+}), addCityController)
 
-//update a city
-cityRouter.put("/users/:id", updatecity)
+cityRouter.put("/cities/:id", updateCityController)
 
+cityRouter.delete("/cities/:id", deleteCityController)
 
-cityRouter.delete("/users/:id", deletecity)
+export default cityRouter;

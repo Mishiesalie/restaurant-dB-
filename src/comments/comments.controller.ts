@@ -1,17 +1,75 @@
 import { Context } from "hono";
-import { commentService } from "./comments.service";
+import { commentService, addCommentService,updateCommentService, deleteCommentService, oneCommentService } from "./comments.service";
 
-export const listcomment = async (c: Context) => {
+export const commentController = async (c: Context) => {
+    try{
+        const comments = await commentService();
+        return c.json(comments);
+    } catch (err: any) {
+        console.error(err)
+        return c.json({error: 'Internal Server Error'}, 500)
+    }
+    
+}
+export const oneCommentController = async (c: Context) => {
+    const id = parseInt(c.req.param("id"));
+    if (isNaN(id)) return c.text("Invalid ID", 400);
+
+    const order = await oneCommentService(id);
+    if (order == undefined) {
+        return c.text("order not found", 404);
+    }
+    return c.json(order, 200);
+}
+
+//add user
+
+export const addCommentController: any = async (c: Context) => {
     try {
-        //limit the number of users to be returned
+        const comment = await c.req.json();
+        const createdComment = await addCommentService(comment);
 
-        const limit = Number(c.req.query('limit'))
+        if (!createdComment) return c.text("Comment not created", 404);
+        return c.json({ msg: createdComment }, 201);
 
-        const data = await commentService(limit);
-        if (data == null || data.length == 0) {
-            return c.text("comments not found", 404)
-        }
-        return c.json(data, 200);
+    } catch (error: any) {
+        return c.json({ error: error?.message }, 400)
+    }
+}
+
+export const updateCommentController = async (c: Context) => {
+    const id = parseInt(c.req.param("id"));
+    if (isNaN(id)) return c.text("Invalid ID", 400);
+
+    const user = await c.req.json();
+    try {
+        // search for the user
+        const searchedUser = await oneCommentService(id);
+        if (searchedUser == undefined) return c.text("Comment not found", 404);
+        // get the data and update it
+        const res = await updateCommentService(id, user);
+        // return a success message
+        if (!res) return c.text("comment not updated", 404);
+
+        return c.json({ msg: res }, 201);
+    } catch (error: any) {
+        return c.json({ error: error?.message }, 400)
+    }
+}
+
+export const deleteCommentController = async (c: Context) => {
+    const id = Number(c.req.param("id"));
+    if (isNaN(id)) return c.text("Invalid ID", 400);
+
+    try {
+        //search for the user
+        const user = await oneCommentService(id);
+        if (user == undefined) return c.text("Comment not found", 404);
+        //deleting the user
+        const res = await deleteCommentService(id);
+        if (!res) return c.text("Comment not deleted", 404);
+
+        return c.json({ msg: res }, 201);
     } catch (error: any) {
         return c.json({ error: error?.message }, 400)
     }

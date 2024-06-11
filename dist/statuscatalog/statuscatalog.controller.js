@@ -1,85 +1,78 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletestatusCatelog = exports.updatestatusCatelog = exports.createstatusCatelog = exports.getstatusCatelog = exports.liststatuscatalog = void 0;
-const statuscatalog_service_1 = require("./statuscatalog.service");
-const liststatuscatalog = async (c) => {
+exports.deleteStatusCatalogController = exports.updateStatusCatalogController = exports.addStatusCatalogController = exports.oneStatusCatalogController = exports.statusCatalogController = void 0;
+const statusCatalog_service_1 = require("./statusCatalog.service");
+const statusCatalogController = async (c) => {
     try {
-        //limit the number of users to be returned
-        const limit = Number(c.req.query('limit'));
-        const data = await (0, statuscatalog_service_1.statuscatalogService)(limit);
-        if (data == null || data.length == 0) {
-            return c.text("statuscatalog not found", 404);
-        }
-        return c.json(data, 200);
+        const statusCatalog = await (0, statusCatalog_service_1.statusCatalogService)();
+        return c.json(statusCatalog);
+    }
+    catch (err) {
+        console.error(err);
+        return c.json({ error: 'Internal Server Error' }, 500);
+    }
+};
+exports.statusCatalogController = statusCatalogController;
+const oneStatusCatalogController = async (c) => {
+    const id = parseInt(c.req.param("id"));
+    if (isNaN(id))
+        return c.text("Invalid ID", 400);
+    const statusCatalog = await (0, statusCatalog_service_1.oneStatusCatalogService)(id);
+    if (statusCatalog == undefined) {
+        return c.text("statusCatalog not found", 404);
+    }
+    return c.json(statusCatalog, 200);
+};
+exports.oneStatusCatalogController = oneStatusCatalogController;
+//add statusCatalog
+const addStatusCatalogController = async (c) => {
+    try {
+        const statusCatalog = await c.req.json();
+        const createdStatusCatalog = await (0, statusCatalog_service_1.addStatusCatalogService)(statusCatalog);
+        if (!createdStatusCatalog)
+            return c.text("User not created", 404);
+        return c.json({ msg: createdStatusCatalog }, 201);
     }
     catch (error) {
         return c.json({ error: error?.message }, 400);
     }
 };
-exports.liststatuscatalog = liststatuscatalog;
-const getstatusCatelog = async (c) => {
+exports.addStatusCatalogController = addStatusCatalogController;
+// update statusCatalog
+const updateStatusCatalogController = async (c) => {
     const id = parseInt(c.req.param("id"));
     if (isNaN(id))
         return c.text("Invalid ID", 400);
-    const statusCatelog = await (0, statuscatalog_service_1.getstatusCatelogService)(id);
-    if (statusCatelog == undefined) {
-        return c.text("statusCatelog not found", 404);
-    }
-    return c.json(statusCatelog, 200);
-};
-exports.getstatusCatelog = getstatusCatelog;
-const createstatusCatelog = async (c) => {
+    const user = await c.req.json();
     try {
-        const statusCatelog = await c.req.json();
-        const createdstatusCatelog = await (0, statuscatalog_service_1.createstatusCatalogService)(statusCatelog);
-        if (!createdstatusCatelog)
-            return c.text("statusCatelog not created", 404);
-        return c.json({ msg: createdstatusCatelog }, 201);
-    }
-    catch (error) {
-        return c.json({ error: error?.message }, 400);
-    }
-};
-exports.createstatusCatelog = createstatusCatelog;
-const updatestatusCatelog = async (c) => {
-    const id = parseInt(c.req.param("id"));
-    if (isNaN(id))
-        return c.text("Invalid ID", 400);
-    const statusCatelog = await c.req.json();
-    try {
-        // search for the statusCatelog
-        const searchedstatusCatelog = await (0, statuscatalog_service_1.getstatusCatelogService)(id);
-        if (searchedstatusCatelog == undefined)
-            return c.text("statusCatelog not found", 404);
-        // get the data and update it
-        const res = await (0, statuscatalog_service_1.updatestatusCatalogService)(id, statusCatelog);
-        // return a success message
+        const searchedStatusCatalog = await (0, statusCatalog_service_1.oneStatusCatalogService)(id);
+        if (searchedStatusCatalog == undefined)
+            return c.text("statusCatalog not found", 404);
+        const res = await (0, statusCatalog_service_1.updateStatusCatalogService)(id, user);
         if (!res)
-            return c.text("statusCatelog not updated", 404);
+            return c.text("statusCatalog not updated", 404);
         return c.json({ msg: res }, 201);
     }
     catch (error) {
         return c.json({ error: error?.message }, 400);
     }
 };
-exports.updatestatusCatelog = updatestatusCatelog;
-const deletestatusCatelog = async (c) => {
+exports.updateStatusCatalogController = updateStatusCatalogController;
+const deleteStatusCatalogController = async (c) => {
     const id = Number(c.req.param("id"));
     if (isNaN(id))
         return c.text("Invalid ID", 400);
     try {
-        //search for the statusCatelog
-        const statusCatelog = await (0, statuscatalog_service_1.getstatusCatelogService)(id);
-        if (statusCatelog == undefined)
-            return c.text("statusCatelog not found", 404);
-        //deleting the statusCatelog
-        const res = await (0, statuscatalog_service_1.deletestatusCatalogService)(id);
+        const statusCatalog = await (0, statusCatalog_service_1.oneStatusCatalogService)(id);
+        if (statusCatalog == undefined)
+            return c.text("statusCatalog not found", 404);
+        const res = await (0, statusCatalog_service_1.deleteStatusCatalogService)(id);
         if (!res)
-            return c.text("statusCatelog not deleted", 404);
+            return c.text("statusCatalog not deleted", 404);
         return c.json({ msg: res }, 201);
     }
     catch (error) {
         return c.json({ error: error?.message }, 400);
     }
 };
-exports.deletestatusCatelog = deletestatusCatelog;
+exports.deleteStatusCatalogController = deleteStatusCatalogController;

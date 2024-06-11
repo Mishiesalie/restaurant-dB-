@@ -1,60 +1,57 @@
 import { Context } from "hono";
-import { statuscatalogService, createstatusCatalogService, getstatusCatelogService, updatestatusCatalogService, deletestatusCatalogService} from "./statuscatalog.service";
+import { statusCatalogService, oneStatusCatalogService, addStatusCatalogService, updateStatusCatalogService, deleteStatusCatalogService } from "./statusCatalog.service";
 
-export const liststatuscatalog = async (c: Context) => {
+export const statusCatalogController = async (c: Context) => {
     try {
-        //limit the number of users to be returned
+        const statusCatalog = await statusCatalogService();
+        return c.json(statusCatalog);
+    } catch (err: any) {
+        console.error(err)
+        return c.json({ error: 'Internal Server Error' }, 500)
+    }
+}
 
-        const limit = Number(c.req.query('limit'))
+export const oneStatusCatalogController = async (c: Context) => {
+    const id = parseInt(c.req.param("id"));
+    if (isNaN(id)) return c.text("Invalid ID", 400);
 
-        const data = await statuscatalogService(limit);
-        if (data == null || data.length == 0) {
-            return c.text("statuscatalog not found", 404)
-        }
-        return c.json(data, 200);
+    const statusCatalog = await oneStatusCatalogService(id);
+    if (statusCatalog == undefined) {
+        return c.text("statusCatalog not found", 404);
+    }
+    return c.json(statusCatalog, 200);
+}
+
+//add statusCatalog
+
+export const addStatusCatalogController = async (c: Context) => {
+    try {
+        const statusCatalog = await c.req.json();
+        const createdStatusCatalog = await addStatusCatalogService(statusCatalog);
+
+        if (!createdStatusCatalog) return c.text("User not created", 404);
+        return c.json({ msg: createdStatusCatalog }, 201);
+
     } catch (error: any) {
         return c.json({ error: error?.message }, 400)
     }
 }
 
+// update statusCatalog
 
-export const getstatusCatelog = async (c: Context) => {
+export const updateStatusCatalogController = async (c: Context) => {
     const id = parseInt(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
-    const statusCatelog = await getstatusCatelogService(id);
-    if (statusCatelog == undefined) {
-        return c.text("statusCatelog not found", 404);
-    }
-    return c.json(statusCatelog, 200);
-}
-export const createstatusCatelog = async (c: Context) => {
+    const user = await c.req.json();
     try {
-        const statusCatelog = await c.req.json();
-        const createdstatusCatelog = await createstatusCatalogService(statusCatelog);
 
+        const searchedStatusCatalog = await oneStatusCatalogService(id);
+        if (searchedStatusCatalog == undefined) return c.text("statusCatalog not found", 404);
 
-        if (!createdstatusCatelog) return c.text("statusCatelog not created", 404);
-        return c.json({ msg: createdstatusCatelog }, 201);
+        const res = await updateStatusCatalogService(id, user);
 
-    } catch (error: any) {
-        return c.json({ error: error?.message }, 400)
-    }
-}
-
-export const updatestatusCatelog = async (c: Context) => {
-    const id = parseInt(c.req.param("id"));
-    if (isNaN(id)) return c.text("Invalid ID", 400);
-
-    const statusCatelog = await c.req.json();
-    try {
-        // search for the statusCatelog
-        const searchedstatusCatelog = await getstatusCatelogService(id);
-        if (searchedstatusCatelog == undefined) return c.text("statusCatelog not found", 404);
-        // get the data and update it
-        const res = await updatestatusCatalogService(id, statusCatelog);
-        // return a success message
-        if (!res) return c.text("statusCatelog not updated", 404);
+        if (!res) return c.text("statusCatalog not updated", 404);
 
         return c.json({ msg: res }, 201);
     } catch (error: any) {
@@ -62,17 +59,16 @@ export const updatestatusCatelog = async (c: Context) => {
     }
 }
 
-export const deletestatusCatelog = async (c: Context) => {
+export const deleteStatusCatalogController = async (c: Context) => {
     const id = Number(c.req.param("id"));
     if (isNaN(id)) return c.text("Invalid ID", 400);
 
     try {
-        //search for the statusCatelog
-        const statusCatelog = await getstatusCatelogService(id);
-        if (statusCatelog == undefined) return c.text("statusCatelog not found", 404);
-        //deleting the statusCatelog
-        const res = await deletestatusCatalogService(id);
-        if (!res) return c.text("statusCatelog not deleted", 404);
+        const statusCatalog = await oneStatusCatalogService(id);
+        if (statusCatalog == undefined) return c.text("statusCatalog not found", 404);
+
+        const res = await deleteStatusCatalogService(id);
+        if (!res) return c.text("statusCatalog not deleted", 404);
 
         return c.json({ msg: res }, 201);
     } catch (error: any) {

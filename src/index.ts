@@ -1,208 +1,62 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono'
-import "dotenv/config"
-// import { usersRouter } from './users/users.router'
-// import { cityRouter } from './city/city.router'
-// import { stateRouter } from './state/state.router'
-// import { categoryRouter } from './Category/category.router'
-// import { restaurantRouter } from './restaurant/restaurant.router'
-// import { restaurantownerRouter } from './restaurantowner/restaurantowner.router'
-
-import { Context } from 'hono'
-// import { driversRouter } from './drivers/drivers.router'
-// import { ordersRouter } from './orders/orders.router'
-// import { commentsRouter } from './comments/comments.router'
-// import { menuItemsRouter } from './menuitems/menuitems.router'
-// import { orderMenuItemRouter } from './ordermenuitems/ordermenuitems.router'
-// import { addressRouter } from './address/address.router'
-// import { statuscatalogRouter } from './statuscatalog/statuscatalog.router'
-// import { orderstatusRouter } from './orderstatus/orderstatus.router'
-
-import { usersRouter } from './users/users.router'
-import { cityRouter } from './city/city.router'
-import { stateRouter } from './state/state.router'
-import { categoryRouter } from './Category/category.router'
+import 'dotenv/config'
 import { restaurantRouter } from './restaurant/restaurant.router'
-import { restaurantownerRouter } from './restaurantowner/restaurantowner.router'
-import { driversRouter } from './drivers/drivers.router'
+import { userRouter } from './users/users.router'
 import { ordersRouter } from './orders/orders.router'
-import { commentsRouter } from './comments/comments.router'
-import { menuItemsRouter } from './menuitems/menuitems.router'
-import { orderMenuItemRouter } from './ordermenuitems/ordermenuitems.router'
+import { stateRouter } from './state/state.router'
+import { menuItemRouter } from './menuItem/menuItem.router'
+import { categoryRouter } from './category/category.router'
+import { commentRouter } from './comments/comments.router'
 import { addressRouter } from './address/address.router'
-import { statuscatalogRouter } from './statuscatalog/statuscatalog.router'
-import { orderstatusRouter } from './orderstatus/orderstatus.router'
+import { cityRouter } from './city/city.router'
+import { orderMenuItemRouter } from './orderMenuItem/orderMenuItem.router'
+import { statusCatalogRouter } from './statusCatalog/statusCatalog.router'
+import { driverRouter } from './driver/driver.router'
+import { restaurantOwnerRouter } from './restaurantOwner/restaurantOwner.router'
+import { orderStatusRouter } from './orderStatus/orderStatus.router'
+import { authRouter } from './auth/auth.router'
 
-const app = new Hono().basePath('/api')
+const app = new Hono()
 
-//... rest of the code
-
-
-
-
-import "dotenv/config"
-import { logger } from 'hono/logger'
-import { csrf } from 'hono/csrf'
-import { trimTrailingSlash } from 'hono/trailing-slash'
-import { timeout } from 'hono/timeout'
-import { HTTPException } from 'hono/http-exception'
-import { authRouter } from './authentification/auth.router'
-
-
-
-
-// const app = new Hono().basePath('/api')
-
-const customTimeoutException = () =>
-  new HTTPException(408, {
-    message: `Request timeout after waiting for more than 10 seconds`,
-  })
-
-const { printMetrics, registerMetrics } = prometheus()
-
-// inbuilt middlewares
-app.use(logger())  //logs request and response to the console
-app.use(csrf()) //prevents CSRF attacks by checking request headers.
-app.use(trimTrailingSlash()) //removes trailing slashes from the request URL
-app.use('/', timeout(10000, customTimeoutException))
-//3rd party middlewares
-app.use('*', registerMetrics)
-
-
-// default route
-app.get('/ok', (c) => {
-  return c.text('The server is running📢😏😏😏!')
-})
-app.get('/timeout', async (c) => {
-  await new Promise((resolve) => setTimeout(resolve, 11000))
-  return c.text("data after 5 seconds", 200)
-})
-app.get('/metrics', printMetrics)
-
-// custom route
-app.route("/", usersRouter)   // api/users
-app.route("/", cityRouter) // api/city
-app.route("/", addressRouter)
-app.route("/", stateRouter)
-app.route("/", categoryRouter)
-app.route("/", restaurantRouter)
-app.route("/", restaurantownerRouter)
-app.route("/", driversRouter)
-app.route("/", ordersRouter)
-app.route("/", commentsRouter)
-app.route("/", menuItemsRouter)
-app.route("/", orderMenuItemRouter)
-app.route("/", addressRouter)
-app.route("/", statuscatalogRouter)
-
-app.route("/", authRouter)   // api/auth/register   or api/auth/login
-
-
-
-serve({
-  fetch: app.fetch,
-  port: Number(process.env.PORT)
-})
-console.log(`Server is running on port ${process.env.PORT}`)
-
-
-
-
-
-
-
-
-
-
-// const app = new Hono()
-
-// default route
-app.get('/kk', (c) => {
+app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
-app.route("/", usersRouter) 
 
-// app.notFound((c) => {
-//     return c.text("route Not Found",404)
-// })
+app.route('/', restaurantRouter)
 
-// custom route
-app.route("/api", usersRouter)  //users
-app.route("/",usersRouter)
+app.route('/', userRouter)
 
-// custom city
-app.route("/api", cityRouter)  
-app.route("/",cityRouter)
+app.route('/', authRouter)
 
-// custom state
-app.route("/api", stateRouter)  
-app.route("/",stateRouter)
+app.route('/', ordersRouter)
 
+app.route('/', stateRouter)
 
-// custom category
-app.route("/api", categoryRouter)  
-app.route("/",categoryRouter)
+app.route('/', menuItemRouter)
 
+app.route('/', categoryRouter)
 
-//custom restaurant
-app.route("/api", restaurantRouter)  
-app.route("/",restaurantRouter)
+app.route('/', commentRouter)
 
+app.route('/', addressRouter)
 
-//custom restaurantowner
-app.route("/api", restaurantownerRouter)  
-app.route("/",restaurantownerRouter)
+app.route('/', cityRouter)
 
+app.route('/', orderMenuItemRouter)
 
-//custom drivers
-app.route("/api",driversRouter)
-app.route("/",driversRouter)
+app.route('/', statusCatalogRouter)
 
+app.route('/', driverRouter)
 
-//custom orders
-app.route("/api",ordersRouter)
-app.route("/",ordersRouter)
+app.route('/', restaurantOwnerRouter)
 
+app.route('/', orderStatusRouter)
 
-//custom comments
-app.route("/api",commentsRouter)
-app.route("/",commentsRouter)
-
-
-//custom menuitems
-app.route("/api",menuItemsRouter)
-app.route("/",menuItemsRouter)
-
-//custom ordermenuitems
-app.route("/api",orderMenuItemRouter)
-app.route("/",orderMenuItemRouter)
-
-
-// custom address
-app.route("/api",addressRouter)
-app.route("/",addressRouter)
-
-
-// custom statuscatalog
-app.route("/api",orderstatusRouter)
-app.route("/",orderstatusRouter)
-
-
-// custom statuscatalog
-app.route("/api",statuscatalogRouter)
-app.route("/",statuscatalogRouter)
-
-
-
-
-console.log(`Server is running on port ${process.env.PORT}`)
 
 serve({
   fetch: app.fetch,
-  port: Number(process.env.PORT) || 3000
+  port: parseInt(process.env.PORT || '3000')
 })
-console.log(`Server is running on port ${process.env.PORT} `)
-function prometheus(): { printMetrics: any; registerMetrics: any } {
-  throw new Error('Function not implemented.')
-}
 
+console.log(`Server is running on port ${process.env.PORT}`)

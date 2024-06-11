@@ -3,38 +3,49 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deletestatusCatalogService = exports.updatestatusCatalogService = exports.createstatusCatalogService = exports.getstatusCatelogService = exports.statuscatalogService = void 0;
-const expressions_1 = require("drizzle-orm/expressions");
+exports.deleteStatusCatalogService = exports.updateStatusCatalogService = exports.addStatusCatalogService = exports.oneStatusCatalogService = exports.statusCatalogService = void 0;
 const db_1 = __importDefault(require("../drizzle/db"));
 const schema_1 = require("../drizzle/schema");
-//get users from the database
-const statuscatalogService = async (limit) => {
-    if (limit) {
-        return await db_1.default.query.status_catalog_table.findMany({
-            limit: limit
-        });
+const drizzle_orm_1 = require("drizzle-orm");
+const statusCatalogService = async () => {
+    try {
+        const statusCatalog = await db_1.default.query.statusCatalogTable.findMany();
+        console.log('Status catalog fetched:', statusCatalog);
+        return statusCatalog;
     }
-    return await db_1.default.query.status_catalog_table.findMany();
+    catch (error) {
+        console.error('Error fetching status:', error);
+        throw error;
+    }
 };
-exports.statuscatalogService = statuscatalogService;
-const getstatusCatelogService = async (id) => {
-    return await db_1.default.query.status_catalog_table.findFirst({
-        where: (0, expressions_1.eq)(schema_1.status_catalog_table.id, id)
+exports.statusCatalogService = statusCatalogService;
+const oneStatusCatalogService = async (id) => {
+    return await db_1.default.query.statusCatalogTable.findFirst({
+        where: (0, drizzle_orm_1.eq)(schema_1.statusCatalogTable.id, id)
     });
 };
-exports.getstatusCatelogService = getstatusCatelogService;
-const createstatusCatalogService = async (statusCatalog) => {
-    await db_1.default.insert(schema_1.status_catalog_table).values(statusCatalog);
-    return "statusCatalog created successfully";
+exports.oneStatusCatalogService = oneStatusCatalogService;
+const addStatusCatalogService = async (statusCatalog) => {
+    await db_1.default.insert(schema_1.statusCatalogTable).values(statusCatalog);
+    return "statusCatalog added successfully";
 };
-exports.createstatusCatalogService = createstatusCatalogService;
-const updatestatusCatalogService = async (id, statusCatalog) => {
-    await db_1.default.update(schema_1.status_catalog_table).set(statusCatalog).where((0, expressions_1.eq)(schema_1.status_catalog_table.id, id));
-    return "statusCatalog updated successfully";
+exports.addStatusCatalogService = addStatusCatalogService;
+const updateStatusCatalogService = async (id, statusCatalog) => {
+    try {
+        const searchedStatusCatalog = await (0, exports.oneStatusCatalogService)(id);
+        if (!searchedStatusCatalog) {
+            return false;
+        }
+        await db_1.default.update(schema_1.statusCatalogTable).set(statusCatalog).where((0, drizzle_orm_1.eq)(schema_1.statusCatalogTable.id, id));
+        return "statusCatalog updated successfully";
+    }
+    catch (error) {
+        throw new Error("Failed to update statusCatalog: ");
+    }
 };
-exports.updatestatusCatalogService = updatestatusCatalogService;
-const deletestatusCatalogService = async (id) => {
-    await db_1.default.delete(schema_1.status_catalog_table).where((0, expressions_1.eq)(schema_1.status_catalog_table.id, id));
+exports.updateStatusCatalogService = updateStatusCatalogService;
+const deleteStatusCatalogService = async (id) => {
+    await db_1.default.delete(schema_1.statusCatalogTable).where((0, drizzle_orm_1.eq)(schema_1.statusCatalogTable.id, id));
     return "statusCatalog deleted successfully";
 };
-exports.deletestatusCatalogService = deletestatusCatalogService;
+exports.deleteStatusCatalogService = deleteStatusCatalogService;
