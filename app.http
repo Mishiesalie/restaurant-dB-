@@ -2,10 +2,10 @@
 
 GET http://localhost:8000/
 
-###
 
-#---- Restaurant---#
-###
+
+########### Restaurant api
+
 GET http://localhost:8000/restaurants
 
 ###
@@ -28,16 +28,21 @@ Content-Type: application/json
 {
     "name": "Hillton"
 }
+
+
 ###
 DELETE http://localhost:8000/restaurants/7
 
-#---------------------- Users- replace the token!!!!!-------------------#
-###
+########### token replacement authorization
+
 GET http://localhost:8000/users
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb2huIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4MTE5MzcwfQ.Mr29IF24BBjwPsSqleccvAm8yLYZ04Ke8gEg5vELDxw
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJKb2huIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzE4MTgyODcyfQ.qXd0gtzae4d1nF8B7q6MPPErZ8Qdkbrv1AnBGDPlkvE
 
 
 
+
+
+############## users api
 POST http://localhost:8000/users
 Content-Type: application/json
 
@@ -50,6 +55,8 @@ Content-Type: application/json
     "createdAt": "2024-06-06",
     "updatedAt": "2024-06-06"
 }
+
+
 ###
 PUT http://localhost:8000/users/8
 Content-Type: application/json
@@ -57,13 +64,15 @@ Content-Type: application/json
 {
     "firstName": "Alexa"
 }
+
+
 ###
 DELETE http://localhost:8000/users/7
 
 
 
-####### Users Register
-###
+############ User Registerations api
+
 POST http://localhost:8000/register
 Content-Type: application/json
 
@@ -80,7 +89,7 @@ Content-Type: application/json
 
 
 
-############## Users Login 
+############## Users Login api
 POST  http://localhost:8000/login
 Content-Type: application/json
 
@@ -89,8 +98,9 @@ Content-Type: application/json
     "password": "password"
 }
 
-############# Orders
-###
+
+
+############# Orders api
 GET http://localhost:8000/orders
 
 ###
@@ -113,6 +123,7 @@ Content-Type: application/json
     "updatedAt": "2024-06-06"
 }
 
+
 ###
 PUT http://localhost:8000/orders/1
 Content-Type: application/json
@@ -120,18 +131,20 @@ Content-Type: application/json
 {
     "price": "1200"
 }
+
+
 ###
 DELETE http://localhost:8000/orders/1
 
 
 
 
-##############  States
-###
+##############  States api
+
 GET http://localhost:8000/states
 
-###
 
+###
 POST http://localhost:8000/states
 Content-Type: application/json
 
@@ -150,7 +163,10 @@ Content-Type: application/json
 ###
 DELETE http://localhost:8000/states/1
 
-##############  Menu_items
+
+
+
+##############  Menu_items api
 ###
 GET http://localhost:8000/menu-items
 
@@ -169,6 +185,7 @@ Content-Type: application/json
     "active": true,
     "createdAt": "2024-06-06",
     "updatedAt": "2024-06-06"
+    
 }
 
 ###
