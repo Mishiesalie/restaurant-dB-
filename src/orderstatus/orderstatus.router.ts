@@ -20,4 +20,4 @@ orderStatusRouter.put("/order-status/:id", updateOrderStatusController)
 
 orderStatusRouter.delete("/order-status/:id", deleteOrderStatusController)
 
-export default orderStatusRouter;
+export default orderStatusRouter; //sents orderStatusRouter to index.ts to be used by the server

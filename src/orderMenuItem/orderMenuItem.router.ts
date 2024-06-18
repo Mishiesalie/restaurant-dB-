@@ -20,4 +20,4 @@ orderMenuItemRouter.put("/order-menu-items/:id", updateOrderMenuItemController)
 
 orderMenuItemRouter.delete("/order-menu-items/:id", deleteOrderMenuItemController)
 
-export default orderMenuItemRouter;
+export default orderMenuItemRouter; //sents orderMenuItemRouter to index.ts to be used by the server

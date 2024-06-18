@@ -23,23 +23,23 @@ app.get('/', (c) => {
   return c.text('Hello Hono!')
 })
 
-app.route('/', restaurantRouter)
+app.route('/', restaurantRouter) //api for sestaurent
 
-app.route('/', userRouter)
+app.route('/', userRouter) //api for sestaurent
 
-app.route('/', authRouter)
+app.route('/', authRouter)  //api for authentification
 
-app.route('/', ordersRouter)
+app.route('/', ordersRouter) //api for orders
 
-app.route('/', stateRouter)
+app.route('/', stateRouter) //api for state
 
-app.route('/', menuItemRouter)
+app.route('/', menuItemRouter) //api for menuitems
 
-app.route('/', categoryRouter)
+app.route('/', categoryRouter) //api for categories
 
-app.route('/', commentRouter)
+app.route('/', commentRouter) //api for comments
 
-app.route('/', addressRouter)
+app.route('/', addressRouter) //api for address
 
 app.route('/', cityRouter)
 

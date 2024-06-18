@@ -19,4 +19,4 @@ stateRouter.put("/states/:id", updateStateController)
 
 stateRouter.delete("/states/:id", deleteStateController)
 
-export default stateRouter;
+export default stateRouter; // sents stateRouter to index.ts to be used by the server

@@ -19,4 +19,4 @@ menuItemRouter.put("/menu-items/:id", updateMenuItemController)
 
 menuItemRouter.delete("/menu-items/:id", deleteMenuItemController)
 
-export default menuItemRouter;
+export default menuItemRouter; //sents menuItemRouter to index.ts to be used by the server

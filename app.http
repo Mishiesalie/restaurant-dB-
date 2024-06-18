@@ -233,7 +233,7 @@ POST http://localhost:8000/comments
 Content-Type: application/json
 
 {
-    "orderId": 1,
+    "orderId": 3,
     "userId": 2,
     "commentText": "Great",
     "isComplaint": true,
@@ -242,13 +242,7 @@ Content-Type: application/json
     "updatedAt": "2024-06-06"
 }
 ###
-PUT http://localhost:8000/comments/1
-Content-Type: application/json
-
-{
-    "commentsText": "Good"
-}
-###
+?
 DELETE http://localhost:8000/comments/1
 
 #---- Address---#
@@ -261,8 +255,8 @@ POST http://localhost:8000/addresses
 Content-Type: application/json
 
 {
-    "streetAddress1": 1,
-    "streetAddress2": 2,
+    "streetAddress1": 1512,
+    "streetAddress2": 2212,
     "zipCode": 20210,
     "deliveryInstructions": "free",
     "userId": 2,

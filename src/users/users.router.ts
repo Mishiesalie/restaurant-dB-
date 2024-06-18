@@ -17,7 +17,7 @@ userRouter.post("users", zValidator('json', userSchema, (result, c) => {
     if (!result.success) {
         return c.json(result.error, 400)
     }
-}), addUserController)
+}), addUserController) 
 
 
 
@@ -28,4 +28,4 @@ userRouter.put("/users/:id", updateUserController)
 userRouter.delete("/users/:id", deleteUserController)
 
 
-export default userRouter;
+export default userRouter; // sents userRouter to index.ts to be used by the server

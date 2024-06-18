@@ -23,4 +23,4 @@ ordersRouter.put("/orders/:id", updateOrderController)
 
 ordersRouter.delete("/orders/:id", deleteOrderController)
 
-export default ordersRouter;
+export default ordersRouter; // sents ordersRouter to index.ts to be used by the server

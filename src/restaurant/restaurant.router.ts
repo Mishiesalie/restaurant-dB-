@@ -25,4 +25,4 @@ restaurantRouter.put("/restaurants/:id", updateRestaurantController)
 restaurantRouter.delete("/restaurants/:id", deleteRestaurantController)
 
 
-export default restaurantRouter;
+export default restaurantRouter; // sents restaurantRouter to index.ts to be used by the server
